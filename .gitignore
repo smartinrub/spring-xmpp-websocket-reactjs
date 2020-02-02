@@ -1,0 +1,34 @@
+# dependencies
+**/**/node_modules
+
+# testing
+**/**/coverage
+
+# production
+**/**/dist
+**/**/build
+
+# misc
+**/**/.DS_Store
+**/**/.vscode
+
+**/**/logs
+**/**/*.log
+**/**/npm-debug.log*
+**/**/yarn-debug.log*
+**/**/yarn-error.log*
+
+**/**/target/
+**/**/target/
+*/target/*
+**/**/.classpath
+**/**/.project
+**/**/.settings
+
+# Package Files #
+**/**/*.jar
+**/**/*.war
+**/**/*.ear
+
+**/**/*.iml
+**/**/*.idea
