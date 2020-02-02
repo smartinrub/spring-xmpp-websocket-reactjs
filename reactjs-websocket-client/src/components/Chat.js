@@ -3,16 +3,12 @@ import { Button, Image } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 
 import '../index.css';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { wsConnect } from '../store/actions/websocketActions';
 import { MessagesListContainer } from '../containers/MessagesListContainer';
 import { AddMessageContainer } from '../containers/AddMessageContainer';
 
 const Chat = ({ dispatch }) => {
-  // const [from, setFrom] = useState('');
-  // const [to, setTo] = useState('');
-  // const [messageType, setMessageType] = useState('');
-
   useEffect(() => {
     dispatch(wsConnect('user1'));
   }, [dispatch]);
