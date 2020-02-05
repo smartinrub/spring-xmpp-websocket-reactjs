@@ -1,6 +1,5 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,8 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "xmpp")
-public class XMPPConnection {
+//@ConfigurationProperties(prefix = "xmpp")
+public class XMPPProperties {
 
     /**
      * The address of the server.

@@ -1,3 +1,5 @@
+import SockJS from 'sockjs-client';
+
 import * as actions from '../actions/websocketActions';
 import { messageReceived } from '../actions/messagesListActions';
 
@@ -5,7 +7,7 @@ const socketMiddleware = () => {
   let socket = null;
 
   const onOpen = store => event => {
-    store.dispatch(actions.wsConnected(event.target.url));
+    // store.dispatch(actions.wsConnected(event.target.url));
   };
 
   const onClose = store => () => {
@@ -40,7 +42,8 @@ const socketMiddleware = () => {
           socket.close();
         }
 
-        socket = new WebSocket('ws://localhost:8080/chat/' + action.username);
+        // https://www.npmjs.com/package/sockjs-client
+        socket = new SockJS('http://localhost:8080/chat');
 
         // websocket handlers
         socket.onmessage = onMessage(store);

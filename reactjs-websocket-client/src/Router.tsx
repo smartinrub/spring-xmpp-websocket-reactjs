@@ -6,11 +6,7 @@ import ChatContainer from './containers/ChatContainer';
 
 const PrivateRoute = ({ component: Component, ...args }: any) => (
   <Route {...args}>
-    {storage.get('isAuthenticated') === true ? (
-      <Component />
-    ) : (
-      <Redirect to="/" />
-    )}
+    {storage.get('isJoined') === true ? <Component /> : <Redirect to="/" />}
   </Route>
 );
 
@@ -21,7 +17,7 @@ const Router = () => (
         <JoinContainer />
       </Route>
       <Route exact path="/">
-        {storage.get('isAuthenticated') ? (
+        {storage.get('isJoined') ? (
           <Redirect to="/chat" />
         ) : (
           <Redirect to="/join" />

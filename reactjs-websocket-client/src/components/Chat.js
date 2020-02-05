@@ -10,7 +10,7 @@ import { AddMessageContainer } from '../containers/AddMessageContainer';
 
 const Chat = ({ dispatch }) => {
   useEffect(() => {
-    dispatch(wsConnect('user1'));
+    dispatch(wsConnect('user2'));
   }, [dispatch]);
 
   return (
