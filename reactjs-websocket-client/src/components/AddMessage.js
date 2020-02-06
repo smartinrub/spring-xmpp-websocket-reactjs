@@ -13,7 +13,7 @@ const AddMessage = ({ dispatch }) => {
   const handleMessage = () => {
     const msg = {
       from: storage.get('user'),
-      to: 'user1',
+      to: 'user2', // TODO: select user from list of users
       content: content,
       messageType: 'NEW_MESSAGE'
     };

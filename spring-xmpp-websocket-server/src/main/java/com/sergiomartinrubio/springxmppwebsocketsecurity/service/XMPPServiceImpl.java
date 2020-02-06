@@ -14,8 +14,14 @@ import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jxmpp.jid.BareJid;
+import org.jxmpp.jid.DomainBareJid;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.parts.Domainpart;
+import org.jxmpp.jid.parts.Localpart;
+import org.jxmpp.jid.parts.Resourcepart;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -24,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
+import static org.jxmpp.jid.impl.JidCreate.entityBareFromUnescaped;
+
 @Slf4j
 @Service
 //@EnableConfigurationProperties(XMPPProperties.class)
@@ -31,16 +40,12 @@ public class XMPPServiceImpl implements XMPPService {
 
 //    private final XMPPProperties properties;
 
+    // TODO: Store connections in DB
     private Map<WebSocketSession, XMPPTCPConnection> connections = new HashMap<>();
 
     @Override
-    public Optional<XMPPTCPConnection> getConnection(WebSocketSession session) {
-        return Optional.ofNullable(connections.get(session));
-    }
-
-    @Override
     public XMPPTCPConnection addConnection(WebSocketSession session, String username) {
-        log.info("Establishing connection with username {}.", username);
+        log.info("Creating connection with username {}.", username);
         var xmppConfiguration = buildConnection(username);
         XMPPTCPConnection xmppTcpConnection = new XMPPTCPConnection(xmppConfiguration);
         connections.put(session, xmppTcpConnection);
@@ -50,7 +55,7 @@ public class XMPPServiceImpl implements XMPPService {
     @Override
     public void connect(XMPPTCPConnection connection) {
         try {
-            connection.connect();
+            connection.connect().login();
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
             throw new XMPPGenericException("XMPP connection failed.", e);
         }
@@ -59,30 +64,26 @@ public class XMPPServiceImpl implements XMPPService {
 
     @Override
     public void addListener(WebSocketSession session) {
-        var xmppTcpConnection = Optional.ofNullable(connections.get(session))
-                .orElseThrow(() -> new XMPPConnectionNotFoundException(session.getId()));
+        var xmppTcpConnection = getConnection(session);
         var chatManager = ChatManager.getInstanceFor(xmppTcpConnection);
         chatManager.addIncomingListener(new XMPPIncomingChatMessageListener(session));
     }
 
     @SneakyThrows
     @Override
-    public void handleMessage(XMPPMessage message, XMPPTCPConnection connection) {
-//        ChatManager.getInstanceFor(connection)
-//                .chatWith(entityBareFrom(message.getTo() + "@localhost"))
-//                .send(message.getContent());
+    public void handleMessage(XMPPMessage message, WebSocketSession session) {
         log.info(message.toString());
+        var xmppTcpConnection = getConnection(session);
         EntityBareJid entityBareJid = JidCreate.entityBareFrom(message.getTo() + "@localhost");
-        ChatManager chatManager = ChatManager.getInstanceFor(connection);
+        ChatManager chatManager = ChatManager.getInstanceFor(xmppTcpConnection);
         Chat chat = chatManager.chatWith(entityBareJid);
         chat.send(message.getContent());
     }
 
     @Override
     public void closeConnection(WebSocketSession session) {
-        var xmppTcpConnection = Optional.ofNullable(connections.get(session))
-                .orElseThrow(() -> new XMPPConnectionNotFoundException(session.getId()));
-        Presence presence = new Presence(Presence.Type.unavailable);
+        var xmppTcpConnection = getConnection(session);
+        var presence = new Presence(Presence.Type.unavailable);
         try {
             xmppTcpConnection.sendStanza(presence);
         } catch (SmackException.NotConnectedException | InterruptedException e) {
@@ -92,21 +93,25 @@ public class XMPPServiceImpl implements XMPPService {
         log.info("XMPP connection closed.");
     }
 
+    public XMPPTCPConnection getConnection(WebSocketSession session) {
+        return Optional.ofNullable(connections.get(session))
+                .orElseThrow(() -> new XMPPConnectionNotFoundException(session.getId()));
+    }
+
     @SneakyThrows
     private XMPPTCPConnectionConfiguration buildConnection(String username) {
-        EntityBareJid entityBareJid;
-
-        entityBareJid = JidCreate.entityBareFrom(username + "@" + "localhost");
+        Localpart localpart = Localpart.fromUnescaped(username);
+//        Domainpart domainpart = Domainpart.from("localhost");
+        Resourcepart resourcepart = Resourcepart.from("web");
         return XMPPTCPConnectionConfiguration.builder()
                 .setHost("localhost")
                 .setPort(5222)
                 .setXmppDomain("localhost")
-                .setUsernameAndPassword(entityBareJid.getLocalpart(), "password")
+                .setUsernameAndPassword(localpart, "password")
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                .setResource(entityBareJid.getResourceOrEmpty())
+                .setResource(resourcepart)
                 .setSendPresence(true)
                 .build();
-
     }
 
 }

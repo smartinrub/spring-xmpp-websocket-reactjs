@@ -1,5 +1,3 @@
-import SockJS from 'sockjs-client';
-
 import * as actions from '../actions/websocketActions';
 import { messageReceived } from '../actions/messagesListActions';
 
@@ -43,7 +41,7 @@ const socketMiddleware = () => {
         }
 
         // https://www.npmjs.com/package/sockjs-client
-        socket = new SockJS('http://localhost:8080/chat');
+        socket = new WebSocket('ws://localhost:8080/chat/' + action.username);
 
         // websocket handlers
         socket.onmessage = onMessage(store);

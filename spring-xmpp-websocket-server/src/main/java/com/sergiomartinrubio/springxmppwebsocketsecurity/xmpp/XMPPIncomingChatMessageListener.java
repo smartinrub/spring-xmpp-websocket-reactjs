@@ -32,6 +32,6 @@ public class XMPPIncomingChatMessageListener implements IncomingChatMessageListe
                 .build();
         Gson gson = new Gson();
         String xmppMessageJson = gson.toJson(xmppMessage);
-        session.sendMessage(new BinaryMessage(xmppMessageJson.getBytes()));
+//        session.sendMessage(new BinaryMessage(xmppMessageJson.getBytes()));
     }
 }

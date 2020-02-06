@@ -21,32 +21,28 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        var gson = new Gson();
-        var xmppMessage = gson.fromJson(message.getPayload(), XMPPMessage.class);
-        XMPPTCPConnection xmppTcpConnection = xmppService.getConnection(session).orElseGet(() -> {
-            XMPPTCPConnection connection = xmppService.addConnection(session, xmppMessage.getFrom());
-            xmppService.connect(connection);
-            xmppService.addListener(session);
-            return connection;
-        });
-
-        xmppService.handleMessage(xmppMessage, xmppTcpConnection);
+        var xmppMessage = new Gson().fromJson(message.getPayload(), XMPPMessage.class);
+        xmppService.handleMessage(xmppMessage, session);
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         log.info("Websocket connection created.");
+        String username = (String) session.getAttributes().get("username");
+        XMPPTCPConnection connection = xmppService.addConnection(session, username);
+        xmppService.connect(connection);
+        xmppService.addListener(session);
     }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        xmppService.closeConnection(session);
+//        xmppService.closeConnection(session);
         log.info("Websocket connection error.");
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         xmppService.closeConnection(session);
-        log.info("Websocket connection closed.");
+        log.info("Websocket connection closed with status {}.", status);
     }
 }

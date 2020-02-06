@@ -7,10 +7,11 @@ import { useEffect } from 'react';
 import { wsConnect } from '../store/actions/websocketActions';
 import { MessagesListContainer } from '../containers/MessagesListContainer';
 import { AddMessageContainer } from '../containers/AddMessageContainer';
+import storage from '../utils/storage';
 
 const Chat = ({ dispatch }) => {
   useEffect(() => {
-    dispatch(wsConnect('user2'));
+    dispatch(wsConnect(storage.get('user')));
   }, [dispatch]);
 
   return (
