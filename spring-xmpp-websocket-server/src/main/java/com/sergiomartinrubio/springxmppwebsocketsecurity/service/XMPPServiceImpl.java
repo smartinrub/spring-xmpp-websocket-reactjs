@@ -4,6 +4,8 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPConnectio
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.XMPPMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPIncomingChatMessageListener;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -22,6 +24,8 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Domainpart;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.jid.parts.Resourcepart;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -35,10 +39,14 @@ import static org.jxmpp.jid.impl.JidCreate.entityBareFromUnescaped;
 
 @Slf4j
 @Service
-//@EnableConfigurationProperties(XMPPProperties.class)
 public class XMPPServiceImpl implements XMPPService {
 
-//    private final XMPPProperties properties;
+    private final XMPPProperties properties;
+
+    @Autowired
+    public XMPPServiceImpl(XMPPProperties properties) {
+        this.properties = properties;
+    }
 
     // TODO: Store connections in DB
     private Map<WebSocketSession, XMPPTCPConnection> connections = new HashMap<>();
@@ -105,8 +113,8 @@ public class XMPPServiceImpl implements XMPPService {
         Resourcepart resourcepart = Resourcepart.from("web");
         return XMPPTCPConnectionConfiguration.builder()
                 .setHost("localhost")
-                .setPort(5222)
-                .setXmppDomain("localhost")
+                .setPort(properties.getPort())
+                .setXmppDomain(properties.getDomain())
                 .setUsernameAndPassword(localpart, "password")
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .setResource(resourcepart)

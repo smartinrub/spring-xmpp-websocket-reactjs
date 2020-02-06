@@ -2,6 +2,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.config;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.SocketHandler;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSocket
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final SocketHandler socketHandler;

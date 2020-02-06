@@ -3,6 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.XMPPMessage;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.chat2.Chat;
@@ -15,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.NEW_MESSAGE;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class XMPPIncomingChatMessageListener implements IncomingChatMessageListener {
 
     private final WebSocketSession session;
