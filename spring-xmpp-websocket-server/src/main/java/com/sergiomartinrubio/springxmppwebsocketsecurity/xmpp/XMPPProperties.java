@@ -29,7 +29,7 @@ public class XMPPProperties {
      */
     private final String domain;
 
-    public XMPPProperties(@DefaultValue("5222") String host, int port, String domain) {
+    public XMPPProperties(String host, @DefaultValue("5222") int port, String domain) {
         this.host = host;
         this.port = port;
         this.domain = domain;
