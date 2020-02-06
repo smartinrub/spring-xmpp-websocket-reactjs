@@ -11,6 +11,7 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jxmpp.jid.EntityBareJid;
 import org.springframework.web.socket.BinaryMessage;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.NEW_MESSAGE;
@@ -33,6 +34,6 @@ public class XMPPIncomingChatMessageListener implements IncomingChatMessageListe
                 .build();
         Gson gson = new Gson();
         String xmppMessageJson = gson.toJson(xmppMessage);
-//        session.sendMessage(new BinaryMessage(xmppMessageJson.getBytes()));
+        session.sendMessage(new TextMessage(xmppMessageJson.getBytes()));
     }
 }
