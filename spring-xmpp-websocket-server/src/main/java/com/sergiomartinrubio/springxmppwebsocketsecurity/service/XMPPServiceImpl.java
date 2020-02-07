@@ -1,11 +1,11 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
+import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPConnectionNotFoundException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.XMPPMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPIncomingChatMessageListener;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPProperties;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -16,17 +16,13 @@ import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jxmpp.jid.BareJid;
-import org.jxmpp.jid.DomainBareJid;
 import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
-import org.jxmpp.jid.parts.Domainpart;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -34,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
-import static org.jxmpp.jid.impl.JidCreate.entityBareFromUnescaped;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.JOIN_SUCCESS;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.NEW_MESSAGE;
 
 @Slf4j
 @Service
@@ -52,22 +48,26 @@ public class XMPPServiceImpl implements XMPPService {
     private Map<WebSocketSession, XMPPTCPConnection> connections = new HashMap<>();
 
     @Override
-    public XMPPTCPConnection addConnection(WebSocketSession session, String username) {
+    public void addConnection(WebSocketSession session, String username) {
         log.info("Creating connection with username {}.", username);
         var xmppConfiguration = buildConnection(username);
-        XMPPTCPConnection xmppTcpConnection = new XMPPTCPConnection(xmppConfiguration);
-        connections.put(session, xmppTcpConnection);
-        return xmppTcpConnection;
+        connections.put(session, new XMPPTCPConnection(xmppConfiguration));
     }
 
+    @SneakyThrows
     @Override
-    public void connect(XMPPTCPConnection connection) {
+    public void connect(WebSocketSession session, String username) {
+        XMPPTCPConnection connection = connections.get(session);
         try {
             connection.connect().login();
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
             throw new XMPPGenericException("XMPP connection failed.", e);
         }
         log.info("Connection established with XMPP.");
+        XMPPMessage xmppMessage = XMPPMessage.builder().to(username).messageType(JOIN_SUCCESS).build();
+        Gson gson = new Gson();
+        String xmppMessageJson = gson.toJson(xmppMessage);
+        session.sendMessage(new TextMessage(xmppMessageJson.getBytes()));
     }
 
     @Override

@@ -7,8 +7,8 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.Optional;
 
 public interface XMPPService {
-    XMPPTCPConnection addConnection(WebSocketSession session, String username);
-    void connect(XMPPTCPConnection connection);
+    void addConnection(WebSocketSession session, String username);
+    void connect(WebSocketSession session, String username);
     void addListener(WebSocketSession session);
     void handleMessage(XMPPMessage message, WebSocketSession session);
     void closeConnection(WebSocketSession session);

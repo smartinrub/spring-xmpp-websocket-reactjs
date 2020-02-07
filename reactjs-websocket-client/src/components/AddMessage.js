@@ -7,7 +7,7 @@ import { newMessage } from '../store/actions/chatActions';
 import storage from '../utils/storage';
 import { messageSent } from '../store/actions/messagesListActions';
 
-const AddMessage = ({ dispatch }) => {
+const AddMessage = ({ messageSent, newMessage }) => {
   const [content, setContent] = useState('');
 
   const handleMessage = () => {
@@ -18,8 +18,8 @@ const AddMessage = ({ dispatch }) => {
       messageType: 'NEW_MESSAGE'
     };
     setContent('');
-    dispatch(messageSent(content));
-    dispatch(newMessage(msg));
+    messageSent(content);
+    newMessage(msg);
   };
 
   const onKeyDown = event => {

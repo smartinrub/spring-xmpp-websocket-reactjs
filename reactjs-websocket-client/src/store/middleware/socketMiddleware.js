@@ -1,5 +1,7 @@
 import * as actions from '../actions/websocketActions';
 import { messageReceived } from '../actions/messagesListActions';
+import { joined } from '../actions/joinActions';
+import storage from '../../utils/storage';
 
 const socketMiddleware = () => {
   let socket = null;
@@ -17,6 +19,7 @@ const socketMiddleware = () => {
     switch (payload.messageType) {
       case 'JOIN_SUCCESS':
         console.log('Connected to XMPP server!');
+        store.dispatch(joined(payload.to));
         break;
       case 'NEW_MESSAGE':
         store.dispatch(messageReceived(payload.content));
@@ -54,6 +57,9 @@ const socketMiddleware = () => {
           socket.close();
         }
         socket = null;
+        break;
+      case 'JOINED':
+        storage.set('user', action.username);
         break;
       case 'NEW_MESSAGE':
         socket.send(JSON.stringify(action.msg));

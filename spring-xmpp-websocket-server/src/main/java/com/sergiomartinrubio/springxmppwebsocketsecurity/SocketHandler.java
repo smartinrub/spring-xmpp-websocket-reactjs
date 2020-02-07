@@ -29,8 +29,8 @@ public class SocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) {
         log.info("Websocket connection created.");
         String username = (String) session.getAttributes().get("username");
-        XMPPTCPConnection connection = xmppService.addConnection(session, username);
-        xmppService.connect(connection);
+        xmppService.addConnection(session, username);
+        xmppService.connect(session, username);
         xmppService.addListener(session);
     }
 

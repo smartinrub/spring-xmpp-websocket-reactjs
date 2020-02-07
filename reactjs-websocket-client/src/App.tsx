@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import Router from './Router';
 import store from './store/store';
+import ChatContainer from './containers/ChatContainer';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Router />
+      <ChatContainer/>
     </Provider>
   );
 };
