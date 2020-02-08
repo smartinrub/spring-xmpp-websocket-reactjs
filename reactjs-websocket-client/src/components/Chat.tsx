@@ -1,10 +1,11 @@
-import React, { useState, FC, useEffect } from 'react';
-import { Button, FormControl, FormLabel, Image, Form } from 'react-bootstrap';
+import React, { FC, useEffect } from 'react';
+import { Button, Image } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 
 import '../index.css';
 import { MessagesListContainer } from '../containers/MessagesListContainer';
 import { AddMessageContainer } from '../containers/AddMessageContainer';
+import Login from './Login';
 import storage from '../utils/storage';
 
 export type ChatProps = {
@@ -14,7 +15,6 @@ export type ChatProps = {
 
 // https://www.igniterealtime.org/projects/openfire/plugins/1.2.1/websocket/readme.html
 const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
-  const [username, setUsername] = useState('');
   const storageUser = storage.get('user');
 
   useEffect(() => {
@@ -22,15 +22,6 @@ const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
       wsConnect(storageUser);
     }
   }, []);
-
-  const validateForm = () => {
-    return username.length > 0;
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    wsConnect(username);
-  };
 
   return (
     <>
@@ -40,28 +31,7 @@ const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
             <h2>Chat App</h2>
           </div>
           {storageUser === null && !isAuthenticated ? (
-            <Form onSubmit={handleSubmit} className="form-signin">
-              <FormLabel className="sr-only">Username</FormLabel>
-              <FormControl
-                autoFocus
-                type="text"
-                placeholder="username"
-                value={username}
-                onChange={(e: any) => setUsername(e.target.value)}
-                required
-              />
-              <div className="invalid-feedback" style={{ width: '100%' }}>
-                Your username is required.
-              </div>
-              <Button
-                className="btn btn-lg btn-primary btn-block"
-                block
-                disabled={!validateForm()}
-                type="submit"
-              >
-                Start Chat
-              </Button>
-            </Form>
+            <Login wsConnect={wsConnect} />
           ) : (
             <div className="container">
               <div className="messaging">
