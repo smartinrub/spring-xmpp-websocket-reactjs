@@ -1,11 +1,11 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
-import com.google.gson.Gson;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.WebSocketUtils;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.config.XMPPProperties;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPConnectionNotFoundException;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.listener.XMPPChatMessageListener;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPIncomingChatMessageListener;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -20,9 +20,7 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.jid.parts.Resourcepart;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -30,18 +28,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.AUTHENTICATED;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class XMPPServiceImpl implements XMPPService {
 
     private final XMPPProperties properties;
-
-    @Autowired
-    public XMPPServiceImpl(XMPPProperties properties) {
-        this.properties = properties;
-    }
+    private final WebSocketUtils webSocketUtils;
 
     // TODO: Store connections in DB
     private Map<WebSocketSession, XMPPTCPConnection> connections = new HashMap<>();
@@ -60,20 +55,18 @@ public class XMPPServiceImpl implements XMPPService {
         try {
             connection.connect().login();
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
-            throw new XMPPGenericException("XMPP connection failed.", e);
+            webSocketUtils.sendMessage(username, ERROR, session);
+            throw e;
         }
         log.info("Connection established with XMPP.");
-        Message message = Message.builder().to(username).type(AUTHENTICATED).build();
-        Gson gson = new Gson();
-        String xmppMessageJson = gson.toJson(message);
-        session.sendMessage(new TextMessage(xmppMessageJson.getBytes()));
+        webSocketUtils.sendMessage(username, AUTHENTICATED, session);
     }
 
     @Override
     public void addListener(WebSocketSession session) {
         var xmppTcpConnection = getConnection(session);
         var chatManager = ChatManager.getInstanceFor(xmppTcpConnection);
-        chatManager.addIncomingListener(new XMPPIncomingChatMessageListener(session));
+        chatManager.addIncomingListener(new XMPPChatMessageListener(session));
     }
 
     @SneakyThrows
@@ -94,7 +87,8 @@ public class XMPPServiceImpl implements XMPPService {
         try {
             xmppTcpConnection.sendStanza(presence);
         } catch (SmackException.NotConnectedException | InterruptedException e) {
-            throw new XMPPGenericException("XMPP connection failed.", e);
+            log.error("Cannot connect to XMPP server");
+            webSocketUtils.sendMessage("", ERROR, session);
         }
         xmppTcpConnection.disconnect();
         log.info("XMPP connection closed.");

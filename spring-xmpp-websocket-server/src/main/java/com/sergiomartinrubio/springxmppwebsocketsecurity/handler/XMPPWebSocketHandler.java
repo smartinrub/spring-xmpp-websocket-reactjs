@@ -1,4 +1,4 @@
-package com.sergiomartinrubio.springxmppwebsocketsecurity;
+package com.sergiomartinrubio.springxmppwebsocketsecurity.handler;
 
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class SocketHandler extends TextWebSocketHandler {
+public class XMPPWebSocketHandler extends TextWebSocketHandler {
 
     private final XMPPServiceImpl xmppService;
 
@@ -34,13 +34,13 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+    public void handleTransportError(WebSocketSession session, Throwable exception) {
 //        xmppService.closeConnection(session);
         log.info("Websocket connection error.");
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         xmppService.closeConnection(session);
         log.info("Websocket connection closed with status {}.", status);
     }

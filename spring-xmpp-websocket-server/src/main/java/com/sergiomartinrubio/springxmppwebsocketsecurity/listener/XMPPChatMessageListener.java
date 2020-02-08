@@ -1,4 +1,4 @@
-package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
+package com.sergiomartinrubio.springxmppwebsocketsecurity.listener;
 
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message;
@@ -15,7 +15,7 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Ty
 
 @Slf4j
 @RequiredArgsConstructor
-public class XMPPIncomingChatMessageListener implements IncomingChatMessageListener {
+public class XMPPChatMessageListener implements IncomingChatMessageListener {
 
     private final WebSocketSession session;
 

@@ -1,4 +1,4 @@
-package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
+package com.sergiomartinrubio.springxmppwebsocketsecurity.config;
 
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

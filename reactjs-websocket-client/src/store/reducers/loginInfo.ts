@@ -1,5 +1,6 @@
 const loginInfoInitialState = {
-  isAuthenticated: false
+  isAuthenticated: false,
+  noUser: false
 };
 
 export const loginInfo = (
@@ -16,7 +17,7 @@ export const loginInfo = (
     case 'LoginFail': {
       return {
         ...state,
-        authenticated: false
+        noUser: true
       };
     }
     default:

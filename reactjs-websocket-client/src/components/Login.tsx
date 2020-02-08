@@ -3,9 +3,10 @@ import { Button, FormControl, FormLabel, Form } from 'react-bootstrap';
 
 export type LoginProps = {
   wsConnect: (email: string) => void;
+  noUser: boolean;
 };
 
-const Login: FC<LoginProps> = ({ wsConnect }) => {
+const Login: FC<LoginProps> = ({ wsConnect, noUser }) => {
   const [username, setUsername] = useState('');
 
   const validateForm = () => {
@@ -26,6 +27,7 @@ const Login: FC<LoginProps> = ({ wsConnect }) => {
         placeholder="username"
         value={username}
         onChange={(e: any) => setUsername(e.target.value)}
+        isInvalid={noUser}
         required
       />
       <div className="invalid-feedback" style={{ width: '100%' }}>

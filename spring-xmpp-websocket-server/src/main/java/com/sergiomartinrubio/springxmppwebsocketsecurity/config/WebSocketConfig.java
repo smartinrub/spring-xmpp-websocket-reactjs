@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.config;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.SocketHandler;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.handler.XMPPWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final SocketHandler socketHandler;
+    private final XMPPWebSocketHandler websocketHandlerXMPP;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(socketHandler, "/chat/*")
+        registry.addHandler(websocketHandlerXMPP, "/chat/*")
                 .setAllowedOrigins("*")
                 .addInterceptors(usernameInterceptor());
     }
@@ -32,14 +32,17 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public HandshakeInterceptor usernameInterceptor() {
         return new HandshakeInterceptor() {
+
+            @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                           WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+                                           WebSocketHandler wsHandler, Map<String, Object> attributes) {
                 String path = request.getURI().getPath();
                 String username = path.substring(path.lastIndexOf('/') + 1);
                 attributes.put("username", username);
                 return true;
             }
 
+            @Override
             public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                        WebSocketHandler wsHandler, Exception exception) {
                 // Nothing to do after handshake

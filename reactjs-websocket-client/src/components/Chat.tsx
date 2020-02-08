@@ -11,10 +11,11 @@ import storage from '../utils/storage';
 export type ChatProps = {
   wsConnect: (email: string) => void;
   isAuthenticated: boolean;
+  noUser: boolean;
 };
 
 // https://www.igniterealtime.org/projects/openfire/plugins/1.2.1/websocket/readme.html
-const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
+const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated, noUser }) => {
   const storageUser = storage.get('user');
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
             <h2>Chat App</h2>
           </div>
           {storageUser === null && !isAuthenticated ? (
-            <Login wsConnect={wsConnect} />
+            <Login wsConnect={wsConnect} noUser={noUser} />
           ) : (
             <div className="container">
               <div className="messaging">

@@ -29,7 +29,7 @@ const socketMiddleware = () => {
         break;
       case 'ERROR':
         console.log('Login failed!!!');
-        // store.dispatch({ type: 'LoginFail' });
+        store.dispatch({ type: 'LoginFail' });
         break;
       default:
         console.log(payload);

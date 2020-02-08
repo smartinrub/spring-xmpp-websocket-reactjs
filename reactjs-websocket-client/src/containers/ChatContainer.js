@@ -3,7 +3,8 @@ import Chat from '../components/Chat';
 import { wsConnect } from '../store';
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.loginInfo.isAuthenticated
+  isAuthenticated: state.loginInfo.isAuthenticated,
+  noUser: state.loginInfo.noUser
 });
 
 const mapDispatchToProps = dispatch => {
