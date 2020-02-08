@@ -1,6 +1,5 @@
 import * as actions from '../actions/websocketActions';
 import { messageReceived } from '../actions/messagesListActions';
-import { joined } from '../actions/joinActions';
 import storage from '../../utils/storage';
 
 const socketMiddleware = () => {
@@ -16,19 +15,21 @@ const socketMiddleware = () => {
 
   const onMessage = store => event => {
     const payload = JSON.parse(event.data);
-    switch (payload.messageType) {
-      case 'JOIN_SUCCESS':
+    switch (payload.type) {
+      case 'AUTHENTICATED':
         console.log('Connected to XMPP server!');
-        store.dispatch(joined(payload.to));
+        store.dispatch({ type: 'LoginSuccess' });
+        storage.set('user', payload.to);
         break;
-      case 'NEW_MESSAGE':
+      case 'CHAT':
         store.dispatch(messageReceived(payload.content));
         break;
-      case 'ERROR':
-        console.log('Join failed!!!');
+      case 'GROUP_CHAT':
+        // store.dispatch(messageReceived(payload.content));
         break;
-      case 'LEAVE':
-        console.log(payload);
+      case 'ERROR':
+        console.log('Login failed!!!');
+        // store.dispatch({ type: 'LoginFail' });
         break;
       default:
         console.log(payload);
@@ -58,10 +59,7 @@ const socketMiddleware = () => {
         }
         socket = null;
         break;
-      case 'JOINED':
-        storage.set('user', action.username);
-        break;
-      case 'NEW_MESSAGE':
+      case 'CHAT':
         socket.send(JSON.stringify(action.msg));
         break;
       default:

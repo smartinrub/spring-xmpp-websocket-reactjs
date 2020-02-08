@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, FC, useEffect } from 'react';
 import { Button, FormControl, FormLabel, Image, Form } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 
 import '../index.css';
-import { wsConnect } from '../store/actions/websocketActions';
 import { MessagesListContainer } from '../containers/MessagesListContainer';
 import { AddMessageContainer } from '../containers/AddMessageContainer';
 import storage from '../utils/storage';
-import { messageSent } from '../store/actions/messagesListActions';
-import { newMessage } from '../store/actions/chatActions';
+
+export type ChatProps = {
+  wsConnect: (email: string) => void;
+  isAuthenticated: boolean;
+};
 
 // https://www.igniterealtime.org/projects/openfire/plugins/1.2.1/websocket/readme.html
-const Chat = ({ wsConnect }) => {
+const Chat: FC<ChatProps> = ({ wsConnect, isAuthenticated }) => {
   const [username, setUsername] = useState('');
+  const storageUser = storage.get('user');
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (storageUser !== null) {
+      wsConnect(storageUser);
+    }
+  }, []);
 
   const validateForm = () => {
     return username.length > 0;
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     wsConnect(username);
   };
@@ -32,7 +39,7 @@ const Chat = ({ wsConnect }) => {
           <div className="py-5 text-center">
             <h2>Chat App</h2>
           </div>
-          {storage.get('user') === null ? (
+          {storageUser === null && !isAuthenticated ? (
             <Form onSubmit={handleSubmit} className="form-signin">
               <FormLabel className="sr-only">Username</FormLabel>
               <FormControl
@@ -40,7 +47,7 @@ const Chat = ({ wsConnect }) => {
                 type="text"
                 placeholder="username"
                 value={username}
-                onChange={e => setUsername(e.target.value)}
+                onChange={(e: any) => setUsername(e.target.value)}
                 required
               />
               <div className="invalid-feedback" style={{ width: '100%' }}>

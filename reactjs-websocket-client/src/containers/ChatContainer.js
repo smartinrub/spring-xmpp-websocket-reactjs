@@ -2,12 +2,16 @@ import { connect } from 'react-redux';
 import Chat from '../components/Chat';
 import { wsConnect } from '../store';
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.loginInfo.isAuthenticated
+});
+
 const mapDispatchToProps = dispatch => {
   return {
     wsConnect: username => dispatch(wsConnect(username))
   };
 };
 
-const ChatContainer = connect(null, mapDispatchToProps)(Chat);
+const ChatContainer = connect(mapStateToProps, mapDispatchToProps)(Chat);
 
 export default ChatContainer;

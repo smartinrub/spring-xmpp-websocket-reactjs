@@ -1,6 +1,6 @@
 const messages = (state = [], action) => {
   switch (action.type) {
-    case 'MESSAGE_SENT':
+    case 'ADD_MESSAGE':
       return state.concat([
         {
           content: action.content,

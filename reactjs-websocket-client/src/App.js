@@ -7,7 +7,7 @@ import ChatContainer from './containers/ChatContainer';
 const App = () => {
   return (
     <Provider store={store}>
-      <ChatContainer/>
+      <ChatContainer />
     </Provider>
   );
 };

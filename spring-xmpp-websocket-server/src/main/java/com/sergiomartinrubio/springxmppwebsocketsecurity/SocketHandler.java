@@ -1,11 +1,10 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity;
 
 import com.google.gson.Gson;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.XMPPMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.service.XMPPServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -21,7 +20,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        var xmppMessage = new Gson().fromJson(message.getPayload(), XMPPMessage.class);
+        var xmppMessage = new Gson().fromJson(message.getPayload(), Message.class);
         xmppService.handleMessage(xmppMessage, session);
     }
 

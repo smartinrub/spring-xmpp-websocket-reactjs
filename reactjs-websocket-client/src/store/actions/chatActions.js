@@ -1,1 +1,1 @@
-export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
+export const chat = msg => ({ type: 'CHAT', msg });

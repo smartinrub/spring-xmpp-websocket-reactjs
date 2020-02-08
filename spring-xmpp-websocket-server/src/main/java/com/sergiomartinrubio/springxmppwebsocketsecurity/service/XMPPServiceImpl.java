@@ -3,7 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPConnectionNotFoundException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.XMPPMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPIncomingChatMessageListener;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPProperties;
 import lombok.SneakyThrows;
@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.JOIN_SUCCESS;
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.NEW_MESSAGE;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.AUTHENTICATED;
 
 @Slf4j
 @Service
@@ -64,9 +63,9 @@ public class XMPPServiceImpl implements XMPPService {
             throw new XMPPGenericException("XMPP connection failed.", e);
         }
         log.info("Connection established with XMPP.");
-        XMPPMessage xmppMessage = XMPPMessage.builder().to(username).messageType(JOIN_SUCCESS).build();
+        Message message = Message.builder().to(username).type(AUTHENTICATED).build();
         Gson gson = new Gson();
-        String xmppMessageJson = gson.toJson(xmppMessage);
+        String xmppMessageJson = gson.toJson(message);
         session.sendMessage(new TextMessage(xmppMessageJson.getBytes()));
     }
 
@@ -79,7 +78,7 @@ public class XMPPServiceImpl implements XMPPService {
 
     @SneakyThrows
     @Override
-    public void handleMessage(XMPPMessage message, WebSocketSession session) {
+    public void handleMessage(Message message, WebSocketSession session) {
         log.info(message.toString());
         var xmppTcpConnection = getConnection(session);
         EntityBareJid entityBareJid = JidCreate.entityBareFrom(message.getTo() + "@localhost");

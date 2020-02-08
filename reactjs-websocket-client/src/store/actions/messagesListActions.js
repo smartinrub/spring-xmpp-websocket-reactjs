@@ -1,7 +1,7 @@
 let nextMessageId = 0;
 
-export const messageSent = content => ({
-  type: 'MESSAGE_SENT',
+export const addMessage = content => ({
+  type: 'ADD_MESSAGE',
   id: nextMessageId++,
   content
 });

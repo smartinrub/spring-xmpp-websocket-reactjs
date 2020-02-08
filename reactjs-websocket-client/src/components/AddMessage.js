@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import '../index.css';
 import { useState } from 'react';
 import { FormControl, Button } from 'react-bootstrap';
-import { newMessage } from '../store/actions/chatActions';
 import storage from '../utils/storage';
-import { messageSent } from '../store/actions/messagesListActions';
 
-const AddMessage = ({ messageSent, newMessage }) => {
+const AddMessage = ({ chat, addMessage }) => {
   const [content, setContent] = useState('');
 
   const handleMessage = () => {
@@ -15,11 +13,11 @@ const AddMessage = ({ messageSent, newMessage }) => {
       from: storage.get('user'),
       to: 'user2', // TODO: select user from list of users
       content: content,
-      messageType: 'NEW_MESSAGE'
+      type: 'CHAT'
     };
     setContent('');
-    messageSent(content);
-    newMessage(msg);
+    addMessage(content);
+    chat(msg);
   };
 
   const onKeyDown = event => {

@@ -5,9 +5,12 @@ import lombok.Value;
 
 @Value
 @Builder
-public class XMPPMessage {
+public class Message {
+
+    public enum Type {AUTHENTICATED, CHAT, GROUP_CHAT, ERROR}
+
     private final String from;
     private final String to;
     private final String content;
-    private final MessageType messageType;
+    private final Type type;
 }

@@ -1,7 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.config;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.SocketHandler;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
