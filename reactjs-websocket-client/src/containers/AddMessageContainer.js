@@ -6,7 +6,7 @@ import { chat } from '../store/actions/chatActions';
 const mapDispatchToProps = dispatch => {
   return {
     addMessage: content => dispatch(addMessage(content)),
-    chat: msg => dispatch(chat(msg))
+    chat: message => dispatch(chat(message))
   };
 };
 

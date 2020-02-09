@@ -14,6 +14,8 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.sasl.SASLError;
+import org.jivesoftware.smack.sasl.SASLErrorException;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
@@ -28,7 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.*;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.AUTHENTICATED;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.Message.Type.ERROR;
 
 @Slf4j
 @Service
@@ -51,15 +54,29 @@ public class XMPPServiceImpl implements XMPPService {
     @SneakyThrows
     @Override
     public void connect(WebSocketSession session, String username) {
+        Message message;
         XMPPTCPConnection connection = connections.get(session);
         try {
             connection.connect().login();
+        } catch (SASLErrorException e) {
+            SASLError saslError = e.getSASLFailure().getSASLError();
+            message = Message.builder().to(username).content(saslError.toString()).type(ERROR).build();
+            webSocketUtils.sendMessage(message, session);
+            switch (saslError){
+                case not_authorized:
+                    log.warn("Invalid username {} because {}", username, saslError);
+                    break;
+                default:
+                    throw e;
+            }
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
-            webSocketUtils.sendMessage(username, ERROR, session);
+            message = Message.builder().to(username).type(ERROR).build();
+            webSocketUtils.sendMessage(message, session);
             throw e;
         }
         log.info("Connection established with XMPP.");
-        webSocketUtils.sendMessage(username, AUTHENTICATED, session);
+        message = Message.builder().to(username).type(AUTHENTICATED).build();
+        webSocketUtils.sendMessage(message, session);
     }
 
     @Override
@@ -88,7 +105,8 @@ public class XMPPServiceImpl implements XMPPService {
             xmppTcpConnection.sendStanza(presence);
         } catch (SmackException.NotConnectedException | InterruptedException e) {
             log.error("Cannot connect to XMPP server");
-            webSocketUtils.sendMessage("", ERROR, session);
+            Message message = Message.builder().type(ERROR).build();
+            webSocketUtils.sendMessage(message, session);
         }
         xmppTcpConnection.disconnect();
         log.info("XMPP connection closed.");

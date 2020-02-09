@@ -1,13 +1,29 @@
-import React, { useState, FC } from 'react';
-import { Button, FormControl, FormLabel, Form } from 'react-bootstrap';
+import React, { FC, useState, useEffect } from 'react';
+import { Button, FormControl, Form, Navbar, InputGroup } from 'react-bootstrap';
+import storage from '../utils/storage';
 
 export type LoginProps = {
-  wsConnect: (email: string) => void;
+  wsConnect: (username: string) => void;
+  wsDisconnect: (username: string) => void;
   noUser: boolean;
+  isAuthenticated: boolean;
+  storageUser: string;
 };
 
-const Login: FC<LoginProps> = ({ wsConnect, noUser }) => {
+const Login: FC<LoginProps> = ({
+  wsConnect,
+  wsDisconnect,
+  noUser,
+  isAuthenticated,
+  storageUser
+}) => {
   const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    if (storageUser !== null) {
+      wsConnect(storageUser);
+    }
+  }, []);
 
   const validateForm = () => {
     return username.length > 0;
@@ -18,30 +34,44 @@ const Login: FC<LoginProps> = ({ wsConnect, noUser }) => {
     wsConnect(username);
   };
 
+  const logout = () => {
+    wsDisconnect(storage.get('user'));
+  };
+
   return (
-    <Form onSubmit={handleSubmit} className="form-signin">
-      <FormLabel className="sr-only">Username</FormLabel>
-      <FormControl
-        autoFocus
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e: any) => setUsername(e.target.value)}
-        isInvalid={noUser}
-        required
-      />
-      <div className="invalid-feedback" style={{ width: '100%' }}>
-        Your username is required.
-      </div>
-      <Button
-        className="btn btn-lg btn-primary btn-block"
-        block
-        disabled={!validateForm()}
-        type="submit"
-      >
-        Start Chat
-      </Button>
-    </Form>
+    <Navbar className="bg-light justify-content-between">
+      {!isAuthenticated && storageUser == null ? (
+        <Form inline onSubmit={handleSubmit}>
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              type="text"
+              aria-describedby="basic-addon1"
+              aria-label="Username"
+              placeholder="Username"
+              className=" mr-sm-2"
+              value={username}
+              onChange={(e: any) => setUsername(e.target.value)}
+              isInvalid={noUser}
+              required
+              autoFocus
+            />
+            <Form.Control.Feedback type="invalid">
+              Invalid username.
+            </Form.Control.Feedback>
+          </InputGroup>
+          <Button type="submit" disabled={!validateForm()}>
+            Login
+          </Button>
+        </Form>
+      ) : (
+        <Button variant="danger" type="submit" onClick={logout}>
+          Logout
+        </Button>
+      )}
+    </Navbar>
   );
 };
 

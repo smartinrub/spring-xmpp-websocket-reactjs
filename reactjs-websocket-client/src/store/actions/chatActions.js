@@ -1,1 +1,3 @@
-export const chat = msg => ({ type: 'CHAT', msg });
+import { CHAT } from '../../constants/ActionTypes';
+
+export const chat = message => ({ type: CHAT, message });

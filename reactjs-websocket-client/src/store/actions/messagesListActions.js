@@ -1,13 +1,15 @@
+import * as types from '../../constants/ActionTypes';
+
 let nextMessageId = 0;
 
 export const addMessage = content => ({
-  type: 'ADD_MESSAGE',
+  type: types.ADD_MESSAGE,
   id: nextMessageId++,
   content
 });
 
 export const messageReceived = content => ({
-  type: 'MESSAGE_RECEIVED',
+  type: types.MESSAGE_RECEIVED,
   id: nextMessageId++,
   content
 });

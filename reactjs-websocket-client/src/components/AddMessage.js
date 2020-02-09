@@ -1,15 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import '../index.css';
 import { useState } from 'react';
 import { FormControl, Button } from 'react-bootstrap';
+
 import storage from '../utils/storage';
+import '../index.css';
 
 const AddMessage = ({ chat, addMessage }) => {
   const [content, setContent] = useState('');
 
   const handleMessage = () => {
-    const msg = {
+    const message = {
       from: storage.get('user'),
       to: 'user2', // TODO: select user from list of users
       content: content,
@@ -17,7 +17,7 @@ const AddMessage = ({ chat, addMessage }) => {
     };
     setContent('');
     addMessage(content);
-    chat(msg);
+    chat(message);
   };
 
   const onKeyDown = event => {
@@ -52,10 +52,6 @@ const AddMessage = ({ chat, addMessage }) => {
       </div>
     </div>
   );
-};
-
-AddMessage.propTypes = {
-  dispatch: PropTypes.func.isRequired
 };
 
 export default AddMessage;

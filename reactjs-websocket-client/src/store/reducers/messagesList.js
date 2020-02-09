@@ -1,6 +1,8 @@
+import * as types from '../../constants/ActionTypes';
+
 const messages = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_MESSAGE':
+    case types.ADD_MESSAGE:
       return state.concat([
         {
           content: action.content,
@@ -8,7 +10,7 @@ const messages = (state = [], action) => {
           type: action.type
         }
       ]);
-    case 'MESSAGE_RECEIVED':
+    case types.MESSAGE_RECEIVED:
       return state.concat([
         {
           content: action.content,

@@ -21,7 +21,15 @@ public class XMPPWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
         var xmppMessage = new Gson().fromJson(message.getPayload(), Message.class);
-        xmppService.handleMessage(xmppMessage, session);
+        switch (xmppMessage.getType()) {
+            case CHAT:
+                xmppService.handleMessage(xmppMessage, session);
+                break;
+            case ERROR:
+                xmppService.closeConnection(session);
+                break;
+        }
+
     }
 
     @Override

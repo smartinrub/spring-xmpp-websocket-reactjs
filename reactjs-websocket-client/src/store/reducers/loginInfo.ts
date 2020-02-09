@@ -14,6 +14,12 @@ export const loginInfo = (
         isAuthenticated: true
       };
     }
+    case 'Logout': {
+      return {
+        ...state,
+        isAuthenticated: false
+      };
+    }
     case 'LoginFail': {
       return {
         ...state,
