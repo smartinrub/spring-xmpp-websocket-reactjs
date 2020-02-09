@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Image, Container } from 'react-bootstrap';
+import { Container, Jumbotron, Button } from 'react-bootstrap';
 
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -8,6 +8,8 @@ import { MessagesListContainer } from '../containers/MessagesListContainer';
 import { AddMessageContainer } from '../containers/AddMessageContainer';
 import Login from './Login';
 import storage from '../utils/storage';
+import SearchBar from './SearchBar';
+import ChatList from './ChatList';
 
 export type ChatProps = {
   wsConnect: (email: string) => void;
@@ -34,73 +36,13 @@ const Chat: FC<ChatProps> = ({
         isAuthenticated={isAuthenticated}
         storageUser={storageUser}
       />
-      {isAuthenticated ? (
-        <Container>
+      <Container>
+        {isAuthenticated ? (
           <div className="messaging">
             <div className="inbox-msg">
               <div className="inbox-people">
-                <div className="headind-srch">
-                  <div className="srch-bar">
-                    <div className="stylish-input-group">
-                      <input
-                        type="text"
-                        className="search-bar"
-                        placeholder="Search"
-                      />
-                      <span className="input-group-addon">
-                        <Button type="button">
-                          {' '}
-                          <i
-                            className="fa fa-search"
-                            aria-hidden="true"
-                          ></i>{' '}
-                        </Button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="inbox-chat">
-                  <div className="chat-list active-chat">
-                    <div className="chat-people">
-                      <div className="chat-img">
-                        {' '}
-                        <Image
-                          src="https://ptetutorials.com/images/user-profile.png"
-                          alt="sunil"
-                        />{' '}
-                      </div>
-                      <div className="chat-ib">
-                        <h5>
-                          John Smith <span className="chat-date">Dec 25</span>
-                        </h5>
-                        <p>
-                          Test, which is a new approach to have all solutions
-                          astrology under one roof.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="chat-list">
-                    <div className="chat-people">
-                      <div className="chat-img">
-                        {' '}
-                        <Image
-                          src="https://ptetutorials.com/images/user-profile.png"
-                          alt="sunil"
-                        />{' '}
-                      </div>
-                      <div className="chat-ib">
-                        <h5>
-                          John Smith <span className="chat-date">Dec 25</span>
-                        </h5>
-                        <p>
-                          Test, which is a new approach to have all solutions
-                          astrology under one roof.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <SearchBar />
+                <ChatList />
               </div>
               <div className="mesgs">
                 <MessagesListContainer />
@@ -108,10 +50,29 @@ const Chat: FC<ChatProps> = ({
               </div>
             </div>
           </div>
-        </Container>
-      ) : (
-        <div></div>
-      )}
+        ) : (
+          <Jumbotron>
+            <h1>Chat App!</h1>
+            <p>
+              This is a Chat App that uses XMPP as the chat protocol in the
+              backend and it is integrated with Spring Boot to provide an easy
+              way to handle the XMPP connections with the Openfire server. The
+              UI is developed with ReactJS and Bootstrap. We use Redux together
+              with React to manage the application state. Also typescript is
+              used to get the benefits of a statically typed language for the
+              UI, which means more safety and fewer bugs.
+            </p>
+            <p>
+              <Button
+                href="https://github.com/smartinrub/spring-xmpp-websocket-reactjs"
+                variant="primary"
+              >
+                Source Code
+              </Button>
+            </p>
+          </Jumbotron>
+        )}
+      </Container>
     </>
   );
 };

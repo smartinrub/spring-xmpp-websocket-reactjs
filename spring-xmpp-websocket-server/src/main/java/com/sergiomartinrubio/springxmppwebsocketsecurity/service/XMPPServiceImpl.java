@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.WebSocketUtils;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.WebSocketUtils;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.config.XMPPProperties;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPConnectionNotFoundException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.listener.XMPPChatMessageListener;
