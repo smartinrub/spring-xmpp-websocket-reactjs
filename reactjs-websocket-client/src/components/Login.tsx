@@ -23,7 +23,7 @@ const Login: FC<LoginProps> = ({
     if (storageUser !== null) {
       wsConnect(storageUser);
     }
-  }, []);
+  }, [wsConnect, storageUser]);
 
   const validateForm = () => {
     return username.length > 0;
