@@ -10,7 +10,7 @@ const socketMiddleware = () => {
   const onMessage = store => event => {
     const message = JSON.parse(event.data);
     switch (message.type) {
-      case 'AUTHENTICATED':
+      case types.AUTHENTICATED:
         console.log('Connected to XMPP server!');
         store.dispatch({ type: 'LoginSuccess' });
         storage.set('user', message.to);
@@ -18,10 +18,10 @@ const socketMiddleware = () => {
       case types.CHAT:
         store.dispatch(messageReceived(message.content));
         break;
-      case 'GROUP_CHAT':
+      case types.GROUP_CHAT:
         // store.dispatch(messageReceived(message.content));
         break;
-      case 'ERROR':
+      case types.ERROR:
         console.log('Login failed!!!');
         store.dispatch({ type: 'LoginFail' });
         break;

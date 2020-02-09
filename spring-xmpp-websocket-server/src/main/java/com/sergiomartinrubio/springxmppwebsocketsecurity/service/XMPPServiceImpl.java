@@ -54,29 +54,29 @@ public class XMPPServiceImpl implements XMPPService {
     @SneakyThrows
     @Override
     public void connect(WebSocketSession session, String username) {
-        Message message;
+        Message.MessageBuilder builder = Message.builder();
+        builder.to(username).type(AUTHENTICATED);
         XMPPTCPConnection connection = connections.get(session);
         try {
             connection.connect().login();
         } catch (SASLErrorException e) {
             SASLError saslError = e.getSASLFailure().getSASLError();
-            message = Message.builder().to(username).content(saslError.toString()).type(ERROR).build();
-            webSocketUtils.sendMessage(message, session);
+            builder.content(saslError.toString()).type(ERROR);
             switch (saslError){
                 case not_authorized:
                     log.warn("Invalid username {} because {}", username, saslError);
                     break;
                 default:
+                    webSocketUtils.sendMessage(builder.build(), session);
                     throw e;
             }
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
-            message = Message.builder().to(username).type(ERROR).build();
-            webSocketUtils.sendMessage(message, session);
+            builder.type(ERROR).build();
+            webSocketUtils.sendMessage(builder.build(), session);
             throw e;
         }
         log.info("Connection established with XMPP.");
-        message = Message.builder().to(username).type(AUTHENTICATED).build();
-        webSocketUtils.sendMessage(message, session);
+        webSocketUtils.sendMessage(builder.build(), session);
     }
 
     @Override

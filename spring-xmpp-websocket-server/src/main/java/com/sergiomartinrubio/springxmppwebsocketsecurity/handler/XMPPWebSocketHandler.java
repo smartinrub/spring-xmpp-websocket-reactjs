@@ -29,7 +29,6 @@ public class XMPPWebSocketHandler extends TextWebSocketHandler {
                 xmppService.closeConnection(session);
                 break;
         }
-
     }
 
     @Override
