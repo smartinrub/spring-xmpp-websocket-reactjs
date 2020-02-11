@@ -1,8 +1,8 @@
-import * as types from '../../constants/ActionTypes';
+import { ADD_MESSAGE, MESSAGE_RECEIVED } from '../actions/messagesListActions';
 
-const messages = (state = [], action) => {
+export const messages = (state: Array<any> = [], action: any) => {
   switch (action.type) {
-    case types.ADD_MESSAGE:
+    case ADD_MESSAGE:
       return state.concat([
         {
           content: action.content,
@@ -10,7 +10,7 @@ const messages = (state = [], action) => {
           type: action.type
         }
       ]);
-    case types.MESSAGE_RECEIVED:
+    case MESSAGE_RECEIVED:
       return state.concat([
         {
           content: action.content,
@@ -22,5 +22,3 @@ const messages = (state = [], action) => {
       return state;
   }
 };
-
-export default messages;

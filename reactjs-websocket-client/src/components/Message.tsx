@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-
-import * as types from '../constants/ActionTypes';
+import { MESSAGE_RECEIVED } from '../store';
 
 export type MessageProps = {
   content: string;
@@ -10,7 +9,7 @@ export type MessageProps = {
 const Message: FC<MessageProps> = ({ content, type }) => {
   let wrapperClassName = 'outgoing-msg';
   let className = 'sent-msg';
-  if (type === types.MESSAGE_RECEIVED) {
+  if (type === MESSAGE_RECEIVED) {
     wrapperClassName = 'incoming-msg';
     className = 'received-msg received-withd-msg';
   }

@@ -9,7 +9,7 @@ import { AddMessageContainer } from '../containers/AddMessageContainer';
 import Login from './Login';
 import storage from '../utils/storage';
 import SearchBar from './SearchBar';
-import ChatList from './ChatList';
+import ChatListContainer from '../containers/ChatListContainer';
 
 export type ChatProps = {
   wsConnect: (email: string) => void;
@@ -42,7 +42,7 @@ const Chat: FC<ChatProps> = ({
             <div className="inbox-msg">
               <div className="inbox-people">
                 <SearchBar />
-                <ChatList />
+                <ChatListContainer />
               </div>
               <div className="mesgs">
                 <MessagesListContainer />
