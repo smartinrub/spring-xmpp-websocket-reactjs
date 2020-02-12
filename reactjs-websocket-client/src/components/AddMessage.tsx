@@ -9,15 +9,16 @@ import { Message } from '../types';
 export type AddMessageProps = {
   chat: (message: Message) => void;
   addMessage: (content: string) => void;
+  recipient: string;
 };
 
-const AddMessage: FC<AddMessageProps> = ({ chat, addMessage }) => {
+const AddMessage: FC<AddMessageProps> = ({ chat, addMessage, recipient }) => {
   const [content, setContent] = useState('');
 
   const handleMessage = () => {
     const message: Message = {
       from: storage.get('user'),
-      to: 'user2', // TODO: select user from list of users
+      to: recipient, // TODO: select user from list of users
       content: content,
       type: 'CHAT'
     };

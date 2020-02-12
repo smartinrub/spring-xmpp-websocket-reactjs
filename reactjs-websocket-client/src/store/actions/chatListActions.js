@@ -2,15 +2,21 @@ import env from '../../env';
 
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_ERROR = 'FETCH_USERS_ERROR';
+export const SELECT_RECIPIENT = 'SELECT_RECIPIENT';
 
 export const fetchUsersSuccess = users => ({
   type: FETCH_USERS_SUCCESS,
-  users
+  users: users
 });
 
 export const fetchUsersError = error => ({
   type: FETCH_USERS_ERROR,
   error: error
+});
+
+export const selectRecipient = recipient => ({
+  type: SELECT_RECIPIENT,
+  recipient: recipient
 });
 
 async function callApi({ path, method }) {

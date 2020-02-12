@@ -4,7 +4,8 @@ import { wsConnect, wsDisconnect } from '../store';
 
 const mapStateToProps = state => ({
   isAuthenticated: state.loginInfo.isAuthenticated,
-  noUser: state.loginInfo.noUser
+  noUser: state.loginInfo.noUser,
+  recipient: state.users.recipient
 });
 
 const mapDispatchToProps = dispatch => {

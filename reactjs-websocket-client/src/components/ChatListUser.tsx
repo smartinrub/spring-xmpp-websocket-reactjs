@@ -3,11 +3,16 @@ import { User } from '../types';
 
 export type ChatListUserProps = {
   user: User;
+  selectRecipient: (userName: string) => void;
 };
 
-const ChatListUser: FC<ChatListUserProps> = ({ user }) => {
+const ChatListUser: FC<ChatListUserProps> = ({ user, selectRecipient }) => {
+  const selectUser = () => {
+    selectRecipient(user.name);
+  };
+
   return (
-    <div className="chat-list active-chat">
+    <div className="chat-list active-chat" onClick={() => selectUser()}>
       <div className="chat-people">
         <div className="chat-ib">
           <h5>

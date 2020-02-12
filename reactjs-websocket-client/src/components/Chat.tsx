@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Container, Jumbotron, Button } from 'react-bootstrap';
+import { Container, Jumbotron, Button, Card } from 'react-bootstrap';
 
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -16,6 +16,7 @@ export type ChatProps = {
   wsDisconnect: (email: string) => void;
   isAuthenticated: boolean;
   noUser: boolean;
+  recipient: string;
 };
 
 // https://www.igniterealtime.org/projects/openfire/plugins/1.2.1/websocket/readme.html
@@ -23,7 +24,8 @@ const Chat: FC<ChatProps> = ({
   wsConnect,
   wsDisconnect,
   isAuthenticated,
-  noUser
+  noUser,
+  recipient
 }) => {
   const storageUser = storage.get('user');
 
@@ -46,7 +48,17 @@ const Chat: FC<ChatProps> = ({
               </div>
               <div className="mesgs">
                 <MessagesListContainer />
-                <AddMessageContainer />
+                {recipient ? (
+                  <AddMessageContainer />
+                ) : (
+                  <Card bg="primary" text="white" style={{ width: '18rem' }}>
+                    <Card.Body>
+                      <Card.Title>
+                        Select someone from the contact list to start a chat!
+                      </Card.Title>
+                    </Card.Body>
+                  </Card>
+                )}
               </div>
             </div>
           </div>

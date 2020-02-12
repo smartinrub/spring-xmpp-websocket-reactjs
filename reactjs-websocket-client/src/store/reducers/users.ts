@@ -1,6 +1,7 @@
 import {
   FETCH_USERS_SUCCESS,
-  FETCH_USERS_ERROR
+  FETCH_USERS_ERROR,
+  SELECT_RECIPIENT
 } from '../actions/chatListActions';
 import { User } from '../../types';
 
@@ -19,6 +20,11 @@ export const users = (state = initialState, action: any) => {
       return {
         ...state,
         error: action.error
+      };
+    case SELECT_RECIPIENT:
+      return {
+        ...state,
+        recipient: action.recipient
       };
     default:
       return state;
