@@ -109,7 +109,7 @@ img {
 }
 
 .inbox-chat {
-  height: 550px;
+  height: 600px;
   overflow-y: scroll;
 }
 
@@ -117,16 +117,10 @@ img {
   background: #ebebeb;
 }
 
-.incoming-msg-img {
-  display: inline-block;
-  width: 6%;
-}
-
 .received-msg {
   display: inline-block;
-  padding: 0 0 0 10px;
   vertical-align: top;
-  width: 92%;
+  width: 90%;
 }
 
 .received-withd-msg p {
@@ -136,7 +130,7 @@ img {
   font-size: 14px;
   margin: 0;
   padding: 5px 10px 5px 12px;
-  width: 100%;
+  width: 90%;
 }
 
 .time-date {
@@ -152,7 +146,6 @@ img {
 
 .mesgs {
   float: left;
-  padding: 30px 15px 0 25px;
   width: 60%;
 }
 
@@ -168,12 +161,13 @@ img {
 
 .outgoing-msg {
   overflow: hidden;
-  margin: 26px 0 26px;
+  margin: 20px 0 20px;
 }
 
 .sent-msg {
   float: right;
   width: 46%;
+  padding: 0 30px 0 0px;
 }
 
 .input-msg-write input {

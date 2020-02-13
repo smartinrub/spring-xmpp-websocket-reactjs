@@ -15,9 +15,9 @@ import java.util.Optional;
 public class UserController {
 
     private Map<String, List<User>> users = Map.of(
-            "user1", List.of(new User("user2"), new User("user3")),
-            "user2", List.of(new User("user1"), new User("user3")),
-            "user3", List.of(new User("user1"), new User("user2")));
+            "sergio", List.of(new User("nini"), new User("john")),
+            "nini", List.of(new User("sergio"), new User("john")),
+            "john", List.of(new User("sergio"), new User("nini")));
 
     @GetMapping("/users/{username}")
     public List<User> getUsers(@PathVariable("username") String username) {
