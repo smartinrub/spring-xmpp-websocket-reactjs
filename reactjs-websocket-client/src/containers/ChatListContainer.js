@@ -3,7 +3,8 @@ import ChatList from '../components/ChatList';
 import { selectRecipient } from '../store';
 
 const mapStateToProps = state => ({
-  usersList: state.users
+  usersList: state.users,
+  currentRecipient: state.users.recipient
 });
 
 const mapDispatchToProps = dispatch => {

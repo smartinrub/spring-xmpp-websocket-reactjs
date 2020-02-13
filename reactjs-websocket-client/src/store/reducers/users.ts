@@ -6,7 +6,8 @@ import {
 import { User } from '../../types';
 
 const initialState = {
-  users: [] as User[]
+  users: [] as User[],
+  recipient: ''
 };
 
 export const users = (state = initialState, action: any) => {

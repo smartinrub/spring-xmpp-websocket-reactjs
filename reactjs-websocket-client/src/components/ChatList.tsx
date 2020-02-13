@@ -4,16 +4,26 @@ import { UsersList, User } from '../types';
 
 export type ChatListProps = {
   usersList: UsersList;
+  currentRecipient: string;
   selectRecipient: (userName: string) => void;
 };
 
-const ChatList: FC<ChatListProps> = ({ usersList, selectRecipient }) => {
+const ChatList: FC<ChatListProps> = ({
+  usersList,
+  selectRecipient,
+  currentRecipient
+}) => {
   useEffect(() => {}, [usersList]);
   return (
     <>
       <div className="inbox-chat">
-        {usersList.users.map((user: User) => (
-          <ChatListUser user={user} selectRecipient={selectRecipient} />
+        {usersList.users.map((user: User, i) => (
+          <ChatListUser
+            key={i}
+            user={user}
+            selectRecipient={selectRecipient}
+            currentRecipient={currentRecipient}
+          />
         ))}
       </div>
     </>

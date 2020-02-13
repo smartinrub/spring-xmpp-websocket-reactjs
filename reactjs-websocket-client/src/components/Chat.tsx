@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Container, Jumbotron, Button, Card } from 'react-bootstrap';
+import { Container, Jumbotron, Button } from 'react-bootstrap';
 
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -51,13 +51,7 @@ const Chat: FC<ChatProps> = ({
                 {recipient ? (
                   <AddMessageContainer />
                 ) : (
-                  <Card bg="primary" text="white" style={{ width: '18rem' }}>
-                    <Card.Body>
-                      <Card.Title>
-                        Select someone from the contact list to start a chat!
-                      </Card.Title>
-                    </Card.Body>
-                  </Card>
+                  <p>Select someone from the contact list to start a chat!</p>
                 )}
               </div>
             </div>
