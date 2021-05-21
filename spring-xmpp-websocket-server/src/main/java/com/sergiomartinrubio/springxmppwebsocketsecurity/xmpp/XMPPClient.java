@@ -1,6 +1,5 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
