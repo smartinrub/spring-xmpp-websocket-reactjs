@@ -19,6 +19,7 @@ import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;
@@ -46,10 +47,12 @@ public class XMPPService {
 
         Optional<Account> account = accountService.getAccount(username);
 
-        if (account.isPresent() && !account.get().getPassword().equals(password)) {
+        if (account.isPresent() && !BCrypt.checkpw(password, account.get().getPassword())) {
             webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(FORBIDDEN).build());
             return;
         }
+
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         XMPPClient xmppClient = new XMPPClient();
         XMPPTCPConnection connection = null;
@@ -61,7 +64,7 @@ public class XMPPService {
                 AccountManager accountManager = AccountManager.getInstance(connection);
                 accountManager.sensitiveOperationOverInsecureConnection(true);
                 accountManager.createAccount(Localpart.from(username), password);
-                accountService.saveAccount(new Account(username, password));
+                accountService.saveAccount(new Account(username, hashedPassword));
             }
 
             connection.login();
