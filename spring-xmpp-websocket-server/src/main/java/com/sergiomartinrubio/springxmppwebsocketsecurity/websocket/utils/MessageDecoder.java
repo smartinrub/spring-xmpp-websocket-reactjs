@@ -1,4 +1,4 @@
-package com.sergiomartinrubio.springxmppwebsocketsecurity.controller.util;
+package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils;
 
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;

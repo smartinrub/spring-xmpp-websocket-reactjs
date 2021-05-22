@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(XMPPConnection.class)
 public class XMPPClient {
 
-    public XMPPTCPConnection connect(String username, String password) throws XmppStringprepException {
+    public XMPPTCPConnection createConnection(String username, String password) throws XmppStringprepException {
         EntityBareJid entityBareJid;
         entityBareJid = JidCreate.entityBareFrom(username + "@" + "localhost");
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()

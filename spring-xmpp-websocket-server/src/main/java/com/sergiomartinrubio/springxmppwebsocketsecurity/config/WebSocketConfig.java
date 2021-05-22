@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.config;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.controller.WebSocketController;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.ChatWebSocket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -17,8 +17,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public WebSocketController webSocketController() {
-        return new WebSocketController();
+    public ChatWebSocket chatWebSocket() {
+        return new ChatWebSocket();
     }
 
     @Bean
