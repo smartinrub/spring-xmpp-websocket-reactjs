@@ -1,13 +1,12 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- *  A connection contains common information needed to connect to an XMPP server
- *  and sign in.
+ * A connection contains common information needed to connect to an XMPP server
+ * and sign in.
  */
 @Getter
 @Setter
