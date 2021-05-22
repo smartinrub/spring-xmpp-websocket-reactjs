@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.AccountRepository;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.repository.AccountRepository;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
