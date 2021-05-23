@@ -50,7 +50,6 @@ public class XMPPService {
     private final XMPPProperties xmppProperties;
 
     public void login(Session session, String username, String password) {
-
         Optional<Account> account = accountService.getAccount(username);
 
         if (account.isPresent() && !BCrypt.checkpw(password, account.get().getPassword())) {
@@ -117,6 +116,7 @@ public class XMPPService {
                 connection.disconnect();
                 log.info("XMPP connection was disconnected for user '{}'.", connection.getUser());
             }
+            CONNECTIONS.remove(session);
         }
     }
 
@@ -132,6 +132,7 @@ public class XMPPService {
             webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
         }
         connection.disconnect();
+        CONNECTIONS.remove(session);
         log.info("Connection closed for user '{}'.", connection.getUser());
     }
 }
