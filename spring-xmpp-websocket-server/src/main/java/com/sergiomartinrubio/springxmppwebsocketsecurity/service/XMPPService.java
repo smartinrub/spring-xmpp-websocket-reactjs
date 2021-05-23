@@ -36,6 +36,7 @@ public class XMPPService {
         Optional<Account> account = accountService.getAccount(username);
 
         if (account.isPresent() && !BCrypt.checkpw(password, account.get().getPassword())) {
+            log.warn("Invalid password for user {}.", username);
             webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(FORBIDDEN).build());
             return;
         }
@@ -81,6 +82,10 @@ public class XMPPService {
 
     public void disconnect(Session session) {
         XMPPTCPConnection connection = CONNECTIONS.get(session);
+
+        if (connection == null) {
+            return;
+        }
 
         try {
             xmppClient.sendStanza(connection, Presence.Type.unavailable);
