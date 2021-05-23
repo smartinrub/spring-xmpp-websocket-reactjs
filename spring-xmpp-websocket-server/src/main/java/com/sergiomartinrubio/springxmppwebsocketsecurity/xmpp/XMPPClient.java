@@ -6,18 +6,18 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-@EnableConfigurationProperties(XMPPConnection.class)
 public class XMPPClient {
+
+    public static final String DOMAIN_NAME = "localhost";
 
     public XMPPTCPConnection createConnection(String username, String password) throws XmppStringprepException {
         EntityBareJid entityBareJid;
-        entityBareJid = JidCreate.entityBareFrom(username + "@" + "localhost");
+        entityBareJid = JidCreate.entityBareFrom(username + "@" + DOMAIN_NAME);
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                .setHost("localhost")
+                .setHost("openfire")
                 .setPort(5222)
-                .setXmppDomain("localhost")
+                .setXmppDomain(DOMAIN_NAME)
                 .setUsernameAndPassword(entityBareJid.getLocalpart(), password)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .setResource(entityBareJid.getResourceOrEmpty())
