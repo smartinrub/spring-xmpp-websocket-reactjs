@@ -1,4 +1,4 @@
-package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.utils;
+package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;

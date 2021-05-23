@@ -28,7 +28,7 @@ public class ChatWebSocket {
 
     @OnOpen
     public void open(Session session, @PathParam("username") String username, @PathParam("password") String password) {
-        xmppService.login(session, username, password);
+        xmppService.startSession(session, username, password);
     }
 
     @OnMessage
