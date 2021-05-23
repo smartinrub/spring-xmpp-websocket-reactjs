@@ -56,6 +56,7 @@ public class XMPPService {
         } catch (XMPPGenericException e) {
             log.error("XMPP error. Disconnecting and removing session...", e);
             xmppClient.disconnect(connection.get());
+            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
             CONNECTIONS.remove(session);
             return;
         }
@@ -70,6 +71,11 @@ public class XMPPService {
 
     public void sendMessage(String message, String to, Session session) {
         XMPPTCPConnection connection = CONNECTIONS.get(session);
+
+        if (connection == null) {
+            return;
+        }
+
         try {
             xmppClient.sendMessage(connection, message, to);
         } catch (XMPPGenericException e) {

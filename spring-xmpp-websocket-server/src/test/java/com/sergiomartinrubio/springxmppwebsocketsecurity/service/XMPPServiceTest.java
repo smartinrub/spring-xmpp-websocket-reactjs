@@ -1,10 +1,12 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
+import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.jxmpp.stringprep.XmppStringprepException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -24,12 +25,18 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.JOIN_SUCCESS;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willThrow;
 
 @ExtendWith(MockitoExtension.class)
 class XMPPServiceTest {
 
     private static final String USERNAME = "user";
     private static final String PASSWORD = "password";
+    private static final String MESSAGE = "hello world";
+    private static final String TO = "other-user";
+
+    @Mock
+    private Session session;
 
     @Mock
     private AccountService accountService;
@@ -43,10 +50,10 @@ class XMPPServiceTest {
     @InjectMocks
     private XMPPService xmppService;
 
+
     @Test
-    void shouldStartSessionWithoutCreatingAccountWhenAccountExistAndCorrectPassword() throws XmppStringprepException {
+    void startSessionShouldStartSessionWithoutCreatingAccountWhenAccountExistAndCorrectPassword() throws XmppStringprepException {
         // GIVEN
-        Session session = Mockito.mock(Session.class);
         XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain("domain")
                 .build();
@@ -66,9 +73,8 @@ class XMPPServiceTest {
     }
 
     @Test
-    void shouldStartSessionAndCreateAccountWhenAccountDoesNotExist() throws XmppStringprepException {
+    void startSessionShouldStartSessionAndCreateAccountWhenAccountDoesNotExist() throws XmppStringprepException {
         // GIVEN
-        Session session = Mockito.mock(Session.class);
         XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain("domain")
                 .build();
@@ -87,9 +93,8 @@ class XMPPServiceTest {
     }
 
     @Test
-    void shouldSendForbiddenMessageWhenWrongPassword() {
+    void startSessionShouldSendForbiddenMessageWhenWrongPassword() {
         // GIVEN
-        Session session = Mockito.mock(Session.class);
         String hashedPassword = BCrypt.hashpw("WRONG", BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
 
@@ -102,9 +107,8 @@ class XMPPServiceTest {
     }
 
     @Test
-    void shouldSendErrorMessageWhenConnectionIsNotPresent() {
+    void startSessionShouldSendErrorMessageWhenConnectionIsNotPresent() {
         // GIVEN
-        Session session = Mockito.mock(Session.class);
         String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.empty());
@@ -115,6 +119,125 @@ class XMPPServiceTest {
         // THEN
         then(xmppClient).shouldHaveNoMoreInteractions();
         then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+    }
+
+    @Test
+    void startSessionShouldSendErrorMessageWhenLoginThrowsXMPPGenericException() throws XmppStringprepException {
+        // GIVEN
+        XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain("domain")
+                .build();
+        XMPPTCPConnection connection = new XMPPTCPConnection(configuration);
+        String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
+        given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
+        given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
+        willThrow(XMPPGenericException.class).given(xmppClient).login(connection);
+
+        // WHEN
+        xmppService.startSession(session, USERNAME, PASSWORD);
+
+        // THEN
+        then(xmppClient).should().disconnect(connection);
+        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+        then(xmppClient).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void sendMessageShouldSendMessage() throws XmppStringprepException {
+        // GIVEN
+        XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain("domain")
+                .build();
+        XMPPTCPConnection connection = new XMPPTCPConnection(configuration);
+        String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
+        given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
+        given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
+        xmppService.startSession(session, USERNAME, PASSWORD);
+
+        // WHEN
+        xmppService.sendMessage(MESSAGE, TO, session);
+
+        // THEN
+        then(xmppClient).should().sendMessage(connection, MESSAGE, TO);
+    }
+
+    @Test
+    void sendMessageShouldSendErrorMessageWhenXMPPGenericException() throws XmppStringprepException {
+        // GIVEN
+        XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain("domain")
+                .build();
+        XMPPTCPConnection connection = new XMPPTCPConnection(configuration);
+        String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
+        given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
+        given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
+        xmppService.startSession(session, USERNAME, PASSWORD);
+        willThrow(XMPPGenericException.class).given(xmppClient).sendMessage(connection, MESSAGE, TO);
+
+        // WHEN
+        xmppService.sendMessage(MESSAGE, TO, session);
+
+        // THEN
+        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+    }
+
+    @Test
+    void sendMessageShouldDoNothingWhenNotFoundConnection() {
+        // WHEN
+        xmppService.sendMessage(MESSAGE, TO, session);
+
+        // THEN
+        then(xmppClient).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void disconnectShouldSendStanzaAndDisconnect() throws XmppStringprepException {
+        // GIVEN
+        XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain("domain")
+                .build();
+        XMPPTCPConnection connection = new XMPPTCPConnection(configuration);
+        String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
+        given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
+        given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
+        xmppService.startSession(session, USERNAME, PASSWORD);
+
+        // WHEN
+        xmppService.disconnect(session);
+
+        // THEN
+        then(xmppClient).should().sendStanza(connection, Presence.Type.unavailable);
+        then(xmppClient).should().disconnect(connection);
+    }
+
+    @Test
+    void disconnectShouldSendErrorMessageWhenXMPPGenericException() throws XmppStringprepException {
+        // GIVEN
+        XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain("domain")
+                .build();
+        XMPPTCPConnection connection = new XMPPTCPConnection(configuration);
+        String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
+        given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
+        given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
+        xmppService.startSession(session, USERNAME, PASSWORD);
+        willThrow(XMPPGenericException.class).given(xmppClient).sendStanza(connection, Presence.Type.unavailable);
+
+
+        // WHEN
+        xmppService.disconnect(session);
+
+        // THEN
+        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+    }
+
+    @Test
+    void disconnectShouldDoNothingWhenNotFoundConnection() {
+        // WHEN
+        xmppService.disconnect(session);
+
+        // THEN
+        then(xmppClient).shouldHaveNoInteractions();
     }
 
     private TextMessage createTextMessage(MessageType type) {
