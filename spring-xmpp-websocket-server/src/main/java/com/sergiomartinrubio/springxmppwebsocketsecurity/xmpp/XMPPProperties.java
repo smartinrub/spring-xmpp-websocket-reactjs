@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "xmpp")
-public class XMPPConnection {
+public class XMPPProperties {
 
     /**
      * The address of the server.

@@ -4,10 +4,11 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericEx
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPProperties;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.utils.XMPPMessageTransmitter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
@@ -15,10 +16,13 @@ import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.PresenceBuilder;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
+import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +39,7 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableConfigurationProperties(XMPPProperties.class)
 public class XMPPService {
 
     private static final Map<Session, XMPPTCPConnection> CONNECTIONS = new HashMap<>();
@@ -42,6 +47,7 @@ public class XMPPService {
     private final AccountService accountService;
     private final WebSocketTextMessageTransmitter webSocketTextMessageTransmitter;
     private final XMPPMessageTransmitter xmppMessageTransmitter;
+    private final XMPPProperties xmppProperties;
 
     public void login(Session session, String username, String password) {
 
@@ -54,10 +60,21 @@ public class XMPPService {
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        XMPPClient xmppClient = new XMPPClient();
         XMPPTCPConnection connection = null;
         try {
-            connection = xmppClient.createConnection(username, password);
+            EntityBareJid entityBareJid;
+            entityBareJid = JidCreate.entityBareFrom(username + "@" + xmppProperties.getDomain());
+            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+                    .setHost(xmppProperties.getDomain())
+                    .setPort(xmppProperties.getPort())
+                    .setXmppDomain(xmppProperties.getDomain())
+                    .setUsernameAndPassword(entityBareJid.getLocalpart(), password)
+                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
+                    .setResource(entityBareJid.getResourceOrEmpty())
+                    .setSendPresence(true)
+                    .build();
+
+            connection = new XMPPTCPConnection(config);
             connection.connect();
 
             if (account.isEmpty()) {
@@ -91,7 +108,7 @@ public class XMPPService {
         XMPPTCPConnection connection = CONNECTIONS.get(session);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         try {
-            Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(to + "@localhost"));
+            Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(to + "@" + xmppProperties.getDomain()));
             chat.send(message);
         } catch (XmppStringprepException | SmackException.NotConnectedException | InterruptedException e) {
             log.error("Unexpected XMPP error.", e);

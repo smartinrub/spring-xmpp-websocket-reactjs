@@ -1,12 +1,12 @@
 services:
-  xmpp-server:
-    container_name: spring-xmpp-websocket-server
-    image: smartinrub/spring-xmpp-websocket-server
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-      - openfire
+#  xmpp-server:
+#    container_name: spring-xmpp-websocket-server
+#    image: smartinrub/spring-xmpp-websocket-server
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - mysql
+#      - openfire
   mysql:
     container_name: mysql
     image: mysql/mysql-server:latest
