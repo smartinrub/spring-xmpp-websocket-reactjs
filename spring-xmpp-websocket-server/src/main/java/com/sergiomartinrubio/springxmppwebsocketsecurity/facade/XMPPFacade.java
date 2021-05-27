@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;
@@ -24,7 +25,7 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.JOIN_SUCCESS;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class XMPPFacade {
 

@@ -5,17 +5,27 @@ services:
 #    ports:
 #      - "8080:8080"
 #    depends_on:
-#      - mysql
+#      - spring-postgres
 #      - openfire
-  mysql:
-    container_name: mysql
+  spring-postgres:
+    container_name: spring-postgres
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: xmpp
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chat
+  openfire-mysql:
+    container_name: openfire-mysql
     image: mysql/mysql-server:latest
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: chat
-      MYSQL_USER: xmpp
-      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: openfire
+      MYSQL_USER: openfireuser
+      MYSQL_PASSWORD: openfirepasswd
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
   openfire:
     container_name: openfire
     image: quantumobject/docker-openfire
@@ -29,3 +39,5 @@ services:
       - "7070:7070"
       - "5229:5229"
       - "5275:5275"
+    depends_on:
+      - openfire-mysql

@@ -21,7 +21,7 @@ public class ChatWebSocket {
     private final XMPPFacade xmppFacade;
 
     public ChatWebSocket() {
-        this.xmppFacade = (XMPPFacade) SpringContext.getApplicationContext().getBean("XMPPService");
+        this.xmppFacade = (XMPPFacade) SpringContext.getApplicationContext().getBean("XMPPFacade");
     }
 
     @OnOpen

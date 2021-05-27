@@ -1,27 +1,55 @@
 # spring-xmpp-websocket-reactjs
 
-## Getting started
+## Tech Stack
 
-1. Run Spring Boot App
-2. Run ReactJS App
+- **Spring Boot**
+- [Smack](https://www.igniterealtime.org/projects/smack/)
+- **Websocket**
+- **[MySQL](https://sergiomartinrubio.com/articles/mysql-guide/)**
+- **[Liquibase](https://sergiomartinrubio.com/articles/getting-started-with-liquibase-and-spring-boot/)**
+- **[BCrypt](https://sergiomartinrubio.com/articles/storing-passwords-securely-with-bcrypt-and-java/)**
+
+## Installation 
+
+1. Run backend services:
+    ```shell
+    docker-compose up
+    ```
+2. Go to `http://localhost:9090` and setup openfire XMPP server:
+    - Server settings:
+        - Set "XMPP Domain Name" to `localhost`
+        - Set "Server Host Name (FQDN)" to `localhost`
+        - Leave the rest as it is.
+    - Database Settings:
+        - Select "Standard Database Connection"
+        - Select "MySQL"
+        - Replace on the "Database URL" `HOSTNAME` with `openfire-mysql` and `DATABASENAME` with `openfire`, then fill in the username and password.
+    - Continue and ignore the rest of the steps.
+4. Now you can use a websocket client to try out the backend application.
+    - Endpoint: ws://localhost:8080/chat/sergio/pass
+    - Connect will return `{"messageType":"JOIN_SUCCESS"}`
+    - Send new message with body: 
+        ```
+        {
+            "from": "sergio",
+            "to": "jose",
+            "content": "hello world",
+            "messageType": "NEW_MESSAGE"
+        }
+        ```
+        will return `{"from":"sergio","to":"jose","content":"hello world","messageType":"NEW_MESSAGE"}`
+
+3. Run ReactJS App
 
 ```shell
 npm install
 npm start
 ```
 
-## Start XMPP Server
+## Running Tests
 
-MySQL server:
+To run tests, run the following command
 
+```bash
+  mvn clean install
 ```
-docker run --name openfire-mysql -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_DATABASE=openfire -e MYSQL_USER=openfireuser -e MYSQL_PASSWORD=openfirepasswd -d mysql/mysql-server:8.0.23
-```
-
-OpenFire XMPP server:
-
-```
-docker run -d -p 9090:9090 -p 5222:5222 -p 5269:5269 -p 5223:5223 -p 7443:7443 -p 7777:7777 -p 7070:7070 -p 5229:5229 -p 5275:5275 --link openfire-mysql:db --name openfire quantumobject/docker-openfire
-```
-
-Then go to http://localhost:9090/ to configure the XMPP server.
