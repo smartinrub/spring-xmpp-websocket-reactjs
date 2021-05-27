@@ -3,7 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.config.SpringContext;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.WebSocketException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.service.XMPPService;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.service.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
 
@@ -18,25 +18,25 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/chat/{username}/{password}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatWebSocket {
 
-    private final XMPPService xmppService;
+    private final XMPPFacade xmppFacade;
 
     public ChatWebSocket() {
-        this.xmppService = (XMPPService) SpringContext.getApplicationContext().getBean("XMPPService");
+        this.xmppFacade = (XMPPFacade) SpringContext.getApplicationContext().getBean("XMPPService");
     }
 
     @OnOpen
     public void open(Session session, @PathParam("username") String username, @PathParam("password") String password) {
-        xmppService.startSession(session, username, password);
+        xmppFacade.startSession(session, username, password);
     }
 
     @OnMessage
     public void handleMessage(TextMessage message, Session session) {
-        xmppService.sendMessage(message.getContent(), message.getTo(), session);
+        xmppFacade.sendMessage(message.getContent(), message.getTo(), session);
     }
 
     @OnClose
     public void close(Session session) {
-        xmppService.disconnect(session);
+        xmppFacade.disconnect(session);
     }
 
     @OnError

@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willThrow;
 
 @ExtendWith(MockitoExtension.class)
-class XMPPServiceTest {
+class XMPPFacadeTest {
 
     private static final String USERNAME = "user";
     private static final String PASSWORD = "password";
@@ -48,7 +48,7 @@ class XMPPServiceTest {
     private XMPPClient xmppClient;
 
     @InjectMocks
-    private XMPPService xmppService;
+    private XMPPFacade xmppFacade;
 
 
     @Test
@@ -63,7 +63,7 @@ class XMPPServiceTest {
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
 
         // WHEN
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // THEN
         then(xmppClient).should().login(connection);
@@ -83,7 +83,7 @@ class XMPPServiceTest {
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
 
         // WHEN
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // THEN
         then(xmppClient).should().login(connection);
@@ -99,7 +99,7 @@ class XMPPServiceTest {
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
 
         // WHEN
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();
@@ -114,7 +114,7 @@ class XMPPServiceTest {
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.empty());
 
         // WHEN
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // THEN
         then(xmppClient).shouldHaveNoMoreInteractions();
@@ -134,7 +134,7 @@ class XMPPServiceTest {
         willThrow(XMPPGenericException.class).given(xmppClient).login(connection);
 
         // WHEN
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // THEN
         then(xmppClient).should().disconnect(connection);
@@ -152,10 +152,10 @@ class XMPPServiceTest {
         String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // WHEN
-        xmppService.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(MESSAGE, TO, session);
 
         // THEN
         then(xmppClient).should().sendMessage(connection, MESSAGE, TO);
@@ -171,11 +171,11 @@ class XMPPServiceTest {
         String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
         willThrow(XMPPGenericException.class).given(xmppClient).sendMessage(connection, MESSAGE, TO);
 
         // WHEN
-        xmppService.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(MESSAGE, TO, session);
 
         // THEN
         then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
@@ -184,7 +184,7 @@ class XMPPServiceTest {
     @Test
     void sendMessageShouldDoNothingWhenNotFoundConnection() {
         // WHEN
-        xmppService.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(MESSAGE, TO, session);
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();
@@ -200,10 +200,10 @@ class XMPPServiceTest {
         String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // WHEN
-        xmppService.disconnect(session);
+        xmppFacade.disconnect(session);
 
         // THEN
         then(xmppClient).should().sendStanza(connection, Presence.Type.unavailable);
@@ -220,12 +220,12 @@ class XMPPServiceTest {
         String hashedPassword = BCrypt.hashpw(PASSWORD, BCrypt.gensalt());
         given(accountService.getAccount(USERNAME)).willReturn(Optional.of(new Account(USERNAME, hashedPassword)));
         given(xmppClient.connect(USERNAME, PASSWORD)).willReturn(Optional.of(connection));
-        xmppService.startSession(session, USERNAME, PASSWORD);
+        xmppFacade.startSession(session, USERNAME, PASSWORD);
         willThrow(XMPPGenericException.class).given(xmppClient).sendStanza(connection, Presence.Type.unavailable);
 
 
         // WHEN
-        xmppService.disconnect(session);
+        xmppFacade.disconnect(session);
 
         // THEN
         then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
@@ -234,7 +234,7 @@ class XMPPServiceTest {
     @Test
     void disconnectShouldDoNothingWhenNotFoundConnection() {
         // WHEN
-        xmppService.disconnect(session);
+        xmppFacade.disconnect(session);
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();

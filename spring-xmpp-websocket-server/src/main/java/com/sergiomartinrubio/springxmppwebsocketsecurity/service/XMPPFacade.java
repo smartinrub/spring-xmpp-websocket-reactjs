@@ -24,7 +24,7 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class XMPPService {
+public class XMPPFacade {
 
     private static final Map<Session, XMPPTCPConnection> CONNECTIONS = new HashMap<>();
 
