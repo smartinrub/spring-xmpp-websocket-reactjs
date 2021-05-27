@@ -3,6 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.BCryptUtils;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class XMPPFacade {
     public void startSession(Session session, String username, String password) {
         Optional<Account> account = accountService.getAccount(username);
 
-        if (account.isPresent() && !BCrypt.checkpw(password, account.get().getPassword())) {
+        if (account.isPresent() && !BCryptUtils.isMatch(password, account.get().getPassword())) {
             log.warn("Invalid password for user {}.", username);
             webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(FORBIDDEN).build());
             return;

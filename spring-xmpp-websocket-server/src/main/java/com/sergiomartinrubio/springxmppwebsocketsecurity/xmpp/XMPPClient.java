@@ -3,6 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.service.AccountService;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.BCryptUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -20,7 +21,6 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.Session;
@@ -73,8 +73,8 @@ public class XMPPClient {
                 XmppStringprepException e) {
             throw new XMPPGenericException(connection.getUser().toString(), e);
         }
-        String hashedPassword = BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
-        accountService.saveAccount(new Account(username, hashedPassword));
+
+        accountService.saveAccount(new Account(username, BCryptUtils.hash(plainTextPassword)));
         log.info("Account for user '{}' created.", username);
     }
 
