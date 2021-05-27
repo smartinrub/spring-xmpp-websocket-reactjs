@@ -25,7 +25,7 @@
         - Select "MySQL"
         - Replace on the "Database URL" `HOSTNAME` with `openfire-mysql` and `DATABASENAME` with `openfire`, then fill in the username and password.
     - Continue and ignore the rest of the steps.
-4. Now you can use a websocket client to try out the backend application.
+3. Now you can use a websocket client to try out the backend application.
     - Endpoint: ws://localhost:8080/chat/sergio/pass
     - Connect will return `{"messageType":"JOIN_SUCCESS"}`
     - Send new message with body: 
@@ -39,7 +39,7 @@
         ```
         will return `{"from":"sergio","to":"jose","content":"hello world","messageType":"NEW_MESSAGE"}`
 
-3. Run ReactJS App
+4. Run ReactJS App
 
 ```shell
 npm install

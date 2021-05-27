@@ -40,7 +40,7 @@ const socketMiddleware = () => {
           socket.close();
         }
 
-        socket = new WebSocket('ws://localhost:8080/chat/' + action.username);
+        socket = new WebSocket('ws://localhost:8080/chat/' + action.username + "/pass");
 
         // websocket handlers
         socket.onmessage = onMessage(store);
