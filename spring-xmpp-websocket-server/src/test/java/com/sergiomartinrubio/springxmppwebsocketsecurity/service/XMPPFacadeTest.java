@@ -1,6 +1,7 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;

@@ -3,7 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.config.SpringContext;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.WebSocketException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.service.XMPPFacade;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
 
