@@ -6,7 +6,6 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.service.XMPPService;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -16,7 +15,6 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@Slf4j
 @ServerEndpoint(value = "/chat/{username}/{password}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatWebSocket {
 

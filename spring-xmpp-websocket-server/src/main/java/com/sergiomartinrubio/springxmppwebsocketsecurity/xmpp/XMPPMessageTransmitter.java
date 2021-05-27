@@ -1,7 +1,7 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Message;
@@ -16,14 +16,14 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 @RequiredArgsConstructor
 public class XMPPMessageTransmitter {
 
-    private final WebSocketTextMessageTransmitter webSocketTextMessageTransmitter;
+    private final WebSocketTextMessageHelper webSocketTextMessageHelper;
 
     public void sendResponse(Message message, Session session) {
         log.info("New message from '{}' to '{}': {}", message.getFrom(), message.getTo(), message.getBody());
         String messageFrom = message.getFrom().getLocalpartOrNull().toString();
         String to = message.getTo().getLocalpartOrNull().toString();
         String content = message.getBody();
-        webSocketTextMessageTransmitter.send(
+        webSocketTextMessageHelper.send(
                 session,
                 TextMessage.builder()
                         .from(messageFrom)

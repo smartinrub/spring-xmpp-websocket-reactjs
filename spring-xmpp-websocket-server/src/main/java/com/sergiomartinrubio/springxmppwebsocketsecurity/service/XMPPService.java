@@ -3,7 +3,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.service;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class XMPPService {
     private static final Map<Session, XMPPTCPConnection> CONNECTIONS = new HashMap<>();
 
     private final AccountService accountService;
-    private final WebSocketTextMessageTransmitter webSocketTextMessageTransmitter;
+    private final WebSocketTextMessageHelper webSocketTextMessageHelper;
     private final XMPPClient xmppClient;
 
     public void startSession(Session session, String username, String password) {
@@ -37,14 +37,14 @@ public class XMPPService {
 
         if (account.isPresent() && !BCrypt.checkpw(password, account.get().getPassword())) {
             log.warn("Invalid password for user {}.", username);
-            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(FORBIDDEN).build());
+            webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(FORBIDDEN).build());
             return;
         }
 
         Optional<XMPPTCPConnection> connection = xmppClient.connect(username, password);
 
         if (connection.isEmpty()) {
-            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
+            webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(ERROR).build());
             return;
         }
 
@@ -56,7 +56,7 @@ public class XMPPService {
         } catch (XMPPGenericException e) {
             log.error("XMPP error. Disconnecting and removing session...", e);
             xmppClient.disconnect(connection.get());
-            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
+            webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(ERROR).build());
             CONNECTIONS.remove(session);
             return;
         }
@@ -66,7 +66,7 @@ public class XMPPService {
 
         xmppClient.addIncomingMessageListener(connection.get(), session);
 
-        webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(JOIN_SUCCESS).build());
+        webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(JOIN_SUCCESS).build());
     }
 
     public void sendMessage(String message, String to, Session session) {
@@ -81,7 +81,7 @@ public class XMPPService {
         } catch (XMPPGenericException e) {
             log.error("XMPP error. Disconnecting and removing session...", e);
             xmppClient.disconnect(connection);
-            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
+            webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(ERROR).build());
             CONNECTIONS.remove(session);
         }
     }
@@ -97,7 +97,7 @@ public class XMPPService {
             xmppClient.sendStanza(connection, Presence.Type.unavailable);
         } catch (XMPPGenericException e) {
             log.error("XMPP error.", e);
-            webSocketTextMessageTransmitter.send(session, TextMessage.builder().messageType(ERROR).build());
+            webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(ERROR).build());
         }
 
         xmppClient.disconnect(connection);

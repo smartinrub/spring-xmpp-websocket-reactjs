@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class WebSocketTextMessageTransmitter {
+public class WebSocketTextMessageHelper {
 
     public void send(Session session, TextMessage textMessage) {
         try {

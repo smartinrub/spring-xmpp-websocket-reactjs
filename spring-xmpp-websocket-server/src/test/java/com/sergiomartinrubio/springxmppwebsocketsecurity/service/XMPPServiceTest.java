@@ -4,7 +4,7 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericEx
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageTransmitter;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -42,7 +42,7 @@ class XMPPServiceTest {
     private AccountService accountService;
 
     @Mock
-    private WebSocketTextMessageTransmitter webSocketTextMessageTransmitter;
+    private WebSocketTextMessageHelper webSocketTextMessageHelper;
 
     @Mock
     private XMPPClient xmppClient;
@@ -68,7 +68,7 @@ class XMPPServiceTest {
         // THEN
         then(xmppClient).should().login(connection);
         then(xmppClient).should().addIncomingMessageListener(connection, session);
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(JOIN_SUCCESS));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS));
         then(xmppClient).shouldHaveNoMoreInteractions();
     }
 
@@ -88,7 +88,7 @@ class XMPPServiceTest {
         // THEN
         then(xmppClient).should().login(connection);
         then(xmppClient).should().addIncomingMessageListener(connection, session);
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(JOIN_SUCCESS));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS));
         then(xmppClient).should().createAccount(connection, USERNAME, PASSWORD);
     }
 
@@ -103,7 +103,7 @@ class XMPPServiceTest {
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(FORBIDDEN));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(FORBIDDEN));
     }
 
     @Test
@@ -118,7 +118,7 @@ class XMPPServiceTest {
 
         // THEN
         then(xmppClient).shouldHaveNoMoreInteractions();
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
     }
 
     @Test
@@ -138,7 +138,7 @@ class XMPPServiceTest {
 
         // THEN
         then(xmppClient).should().disconnect(connection);
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
         then(xmppClient).shouldHaveNoMoreInteractions();
     }
 
@@ -178,7 +178,7 @@ class XMPPServiceTest {
         xmppService.sendMessage(MESSAGE, TO, session);
 
         // THEN
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
     }
 
     @Test
@@ -228,7 +228,7 @@ class XMPPServiceTest {
         xmppService.disconnect(session);
 
         // THEN
-        then(webSocketTextMessageTransmitter).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
     }
 
     @Test
