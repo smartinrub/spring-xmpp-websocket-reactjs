@@ -7,12 +7,11 @@ import {
   FormLabel,
   Jumbotron,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { login } from "../../features/user/userSlice";
 
 // use rfce to generate component quickly
-const Login = () => {
+const Login = ({ dispatch }) => {
   let history = useHistory();
 
   const [username, setUsername] = useState("");
@@ -21,8 +20,6 @@ const Login = () => {
   const validateForm = () => {
     return username.length > 0 && password.length > 0;
   };
-
-  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();

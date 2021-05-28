@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import Login from "./components/login/Login";
 import Logout from "./components/logout/Logout";
+import LoginContainer from "./containers/LoginContainer";
 import { selectLoggedIn } from "./features/user/userSlice";
 
 const Router = () => {
@@ -12,7 +12,7 @@ const Router = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/login">
-          <Login />
+          <LoginContainer />
         </Route>
         <Route exact path="/">
           {loggedIn ? <Redirect to="/home" /> : <Redirect to="/login" />}
