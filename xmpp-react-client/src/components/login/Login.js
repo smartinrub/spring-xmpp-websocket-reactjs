@@ -7,12 +7,10 @@ import {
   FormLabel,
   Jumbotron,
 } from "react-bootstrap";
-import { useHistory } from "react-router";
-import { login } from "../../features/user/userSlice";
+import { wsConnect } from "../../app/websocketActions";
 
 // use rfce to generate component quickly
 const Login = ({ dispatch }) => {
-  let history = useHistory();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +21,7 @@ const Login = ({ dispatch }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      login({
-        username: username,
-        password: password,
-        loggedIn: true,
-      })
-    );
-    history.push("/home");
+    dispatch(wsConnect(username, password));
   };
 
   return (

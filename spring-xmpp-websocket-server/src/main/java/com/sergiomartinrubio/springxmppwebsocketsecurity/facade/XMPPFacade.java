@@ -69,7 +69,7 @@ public class XMPPFacade {
 
         xmppClient.addIncomingMessageListener(connection.get(), session);
 
-        webSocketTextMessageHelper.send(session, TextMessage.builder().messageType(JOIN_SUCCESS).build());
+        webSocketTextMessageHelper.send(session, TextMessage.builder().to(username).messageType(JOIN_SUCCESS).build());
     }
 
     public void sendMessage(String message, String to, Session session) {

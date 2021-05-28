@@ -1,15 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { Router } from "react-router";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { history } from "./browserhistory";
 import Logout from "./components/logout/Logout";
 import LoginContainer from "./containers/LoginContainer";
 import { selectLoggedIn } from "./features/user/userSlice";
 
-const Router = () => {
+const MyRouter = () => {
   const loggedIn = useSelector(selectLoggedIn);
 
   return (
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Route exact path="/login">
           <LoginContainer />
@@ -19,7 +21,7 @@ const Router = () => {
         </Route>
         <PrivateRoute exact path="/home" component={Logout} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 
@@ -33,4 +35,4 @@ const PrivateRoute = ({ component: Component, ...args }) => {
   );
 };
 
-export default Router;
+export default MyRouter;
