@@ -8,10 +8,13 @@ import {
   Jumbotron,
 } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { login } from "../../features/user/userSlice";
 
 // use rfce to generate component quickly
 const Login = () => {
+  let history = useHistory();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,6 +33,7 @@ const Login = () => {
         loggedIn: true,
       })
     );
+    history.push("/home");
   };
 
   return (
