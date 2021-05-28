@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Image, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { wsDisconnect } from "../../app/websocketActions";
+import { AddMessageContainer } from "../../containers/AddMessageContainer";
 import { MessagesContainer } from "../../containers/MessagesContainer";
 import { selectUsername } from "../../features/user/userSlice";
 
@@ -95,7 +96,7 @@ const Home = () => {
           </div>
           <div className="mesgs">
             <MessagesContainer />
-            {/* <AddMessageContainer dispatch={dispatch} /> */}
+            <AddMessageContainer dispatch={dispatch} />
           </div>
         </div>
       </div>
