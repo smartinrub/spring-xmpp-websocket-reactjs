@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Button,
   Container,
   FormControl,
@@ -7,11 +8,12 @@ import {
   FormLabel,
   Jumbotron,
 } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { wsConnect } from "../../app/websocketActions";
+import { selectAlertUser } from "../../features/user/alertUserSlice";
 
 // use rfce to generate component quickly
 const Login = ({ dispatch }) => {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,6 +26,8 @@ const Login = ({ dispatch }) => {
     dispatch(wsConnect(username, password));
   };
 
+  const alertUser = useSelector(selectAlertUser);
+
   return (
     <div className="login">
       <Jumbotron fluid>
@@ -32,6 +36,20 @@ const Login = ({ dispatch }) => {
         </Container>
       </Jumbotron>
       <Container>
+        <div
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: "relative",
+            minHeight: "100px",
+          }}
+        >
+          {alertUser ? (
+            <Alert variant="danger">Invalid password!</Alert>
+          ) : (
+            <div></div>
+          )}
+        </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <FormGroup controlId="username">
             <FormLabel>Username</FormLabel>

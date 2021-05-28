@@ -1,4 +1,5 @@
 import { history } from "../browserhistory";
+import { disableAlertUser, enableAlertUser } from "../features/user/alertUserSlice";
 import { login, logout } from "../features/user/userSlice";
 
 const websocketMiddleware = () => {
@@ -21,6 +22,8 @@ const websocketMiddleware = () => {
           })
         );
 
+        store.dispatch(disableAlertUser());
+
         history.push("/home");
 
         console.log("Connected to XMPP server!");
@@ -33,6 +36,12 @@ const websocketMiddleware = () => {
         break;
       case "LEAVE":
         console.log(payload);
+        break;
+      case "FORBIDDEN":
+        store.dispatch(
+          enableAlertUser({ message: "Invalid password", enabled: true })
+        );
+        console.log("Invalid password");
         break;
       default:
         console.log(payload);
