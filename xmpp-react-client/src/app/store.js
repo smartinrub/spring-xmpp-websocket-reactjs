@@ -6,7 +6,6 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
   },
-  middleware: {
-    websocket: websocketMiddleware
-  }
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(websocketMiddleware),
 });
