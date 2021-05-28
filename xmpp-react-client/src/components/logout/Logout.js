@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { wsDisconnect } from "../../app/websocketActions";
 import { logout, selectUsername } from "../../features/user/userSlice";
 
 const Logout = () => {
@@ -10,7 +11,7 @@ const Logout = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    dispatch(logout());
+    dispatch(wsDisconnect());
   };
 
   return (

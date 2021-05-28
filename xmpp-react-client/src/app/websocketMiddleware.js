@@ -1,5 +1,5 @@
 import { history } from "../browserhistory";
-import { login } from "../features/user/userSlice";
+import { login, logout } from "../features/user/userSlice";
 
 const websocketMiddleware = () => {
   let socket = null;
@@ -21,8 +21,8 @@ const websocketMiddleware = () => {
           })
         );
 
-        history.push("/home")
-        
+        history.push("/home");
+
         console.log("Connected to XMPP server!");
         break;
       case "NEW_MESSAGE":
@@ -58,6 +58,12 @@ const websocketMiddleware = () => {
 
         break;
       case "WS_DISCONNECT":
+        if (socket !== null) {
+          socket.close();
+        }
+        socket = null;
+        store.dispatch(logout());
+        history.push("/login");
         break;
       case "NEW_MESSAGE":
         break;
