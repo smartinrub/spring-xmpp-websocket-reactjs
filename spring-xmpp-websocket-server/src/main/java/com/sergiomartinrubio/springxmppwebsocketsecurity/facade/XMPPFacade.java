@@ -119,6 +119,7 @@ public class XMPPFacade {
                         .build();
                 webSocketTextMessageHelper.send(session, responseMessage);
             }
+            default -> log.warn("Message type not implemented.");
         }
     }
 
