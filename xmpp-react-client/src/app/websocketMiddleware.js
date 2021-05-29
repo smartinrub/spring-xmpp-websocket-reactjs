@@ -75,6 +75,7 @@ const websocketMiddleware = () => {
         history.push("/login");
         break;
       case "NEW_MESSAGE":
+        socket.send(JSON.stringify(action.msg));
         break;
       default:
         return next(action);

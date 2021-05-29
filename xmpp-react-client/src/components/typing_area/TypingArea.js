@@ -1,22 +1,27 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-// import { newMessage } from "../store/actions/chatActions";
+import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { newMessage } from "../../app/typingAreaActions";
+import { selectUsername } from "../../features/user/userSlice";
 // import { messageSent } from "../store/actions/messagesListActions";
 // import storage from "../utils/storage";
 
 const TypingArea = ({ dispatch }) => {
   const [content, setContent] = useState("");
 
+  const user = useSelector(selectUsername);
+
   const handleMessage = () => {
     const msg = {
-      //   from: storage.get("user"),
-      to: "user2",
+      from: user.username,
+      to: "sergio",
       content: content,
       messageType: "NEW_MESSAGE",
     };
     setContent("");
     // dispatch(messageSent(content));
-    // dispatch(newMessage(msg));
+    dispatch(newMessage(msg));
   };
 
   const onKeyDown = (event) => {
@@ -40,14 +45,14 @@ const TypingArea = ({ dispatch }) => {
           placeholder="Type a message"
           onKeyDown={onKeyDown}
         />
-        <button
+        <Button
           className="msg-send-btn"
           type="button"
           onClick={handleMessage}
           disabled={!validateForm()}
         >
           Send
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -8,14 +8,22 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.BCryptUtils;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smackx.search.ReportedData;
+import org.jivesoftware.smackx.search.UserSearchManager;
+import org.jivesoftware.smackx.xdata.form.Form;
+import org.jivesoftware.smackx.xdata.packet.DataForm;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -72,12 +80,25 @@ public class XMPPFacade {
         webSocketTextMessageHelper.send(session, TextMessage.builder().to(username).messageType(JOIN_SUCCESS).build());
     }
 
+    @SneakyThrows
     public void sendMessage(String message, String to, Session session) {
         XMPPTCPConnection connection = CONNECTIONS.get(session);
 
         if (connection == null) {
             return;
         }
+
+
+
+//        Roster roster = Roster.getInstanceFor(connection);
+//
+//        if (!roster.isLoaded())
+//            roster.reloadAndWait();
+//
+//        Collection<RosterEntry> entries = roster.getEntries();
+//        for (RosterEntry entry : entries) {
+//            System.out.println(entry);
+//        }
 
         try {
             xmppClient.sendMessage(connection, message, to);
