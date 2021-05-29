@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 
 const UsersBox = () => {
   return (
@@ -9,10 +9,7 @@ const UsersBox = () => {
           <div className="stylish-input-group">
             <input type="text" className="search-bar" placeholder="Search" />
             <span className="input-group-addon">
-              <Button type="button">
-                {" "}
-                <i className="fa fa-search" aria-hidden="true"></i>{" "}
-              </Button>
+              <button type="button">Search</button>
             </span>
           </div>
         </div>

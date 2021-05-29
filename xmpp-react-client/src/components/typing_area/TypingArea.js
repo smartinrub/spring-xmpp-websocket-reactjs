@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { Button, FormControl } from "react-bootstrap";
 // import { newMessage } from "../store/actions/chatActions";
 // import { messageSent } from "../store/actions/messagesListActions";
 // import storage from "../utils/storage";
@@ -33,7 +32,7 @@ const TypingArea = ({ dispatch }) => {
   return (
     <div className="type-msg">
       <div className="input-msg-write">
-        <FormControl
+        <input
           type="text"
           className="write-msg"
           value={content}
@@ -41,14 +40,14 @@ const TypingArea = ({ dispatch }) => {
           placeholder="Type a message"
           onKeyDown={onKeyDown}
         />
-        <Button
+        <button
           className="msg-send-btn"
           type="button"
           onClick={handleMessage}
           disabled={!validateForm()}
         >
-          <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
-        </Button>
+          Send
+        </button>
       </div>
     </div>
   );
