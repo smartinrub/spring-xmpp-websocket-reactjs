@@ -45,14 +45,14 @@ const TypingArea = ({ dispatch }) => {
           placeholder="Type a message"
           onKeyDown={onKeyDown}
         />
-        <Button
+        <button
           className="msg-send-btn"
           type="button"
           onClick={handleMessage}
           disabled={!validateForm()}
         >
           Send
-        </Button>
+        </button>
       </div>
     </div>
   );
