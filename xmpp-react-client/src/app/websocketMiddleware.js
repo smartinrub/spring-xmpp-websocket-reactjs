@@ -1,5 +1,8 @@
 import { history } from "../browserhistory";
-import { disableAlertUser, enableAlertUser } from "../features/user/alertUserSlice";
+import {
+  disableAlertUser,
+  enableAlertUser,
+} from "../features/user/alertUserSlice";
 import { login, logout } from "../features/user/userSlice";
 
 const websocketMiddleware = () => {
@@ -75,6 +78,9 @@ const websocketMiddleware = () => {
         history.push("/login");
         break;
       case "NEW_MESSAGE":
+        socket.send(JSON.stringify(action.msg));
+        break;
+      case "ADD_CONTACT":
         socket.send(JSON.stringify(action.msg));
         break;
       default:

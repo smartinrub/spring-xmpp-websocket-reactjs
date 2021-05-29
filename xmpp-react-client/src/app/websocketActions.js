@@ -3,4 +3,4 @@ export const wsConnect = (username, password) => ({
   username,
   password,
 });
-export const wsDisconnect = (username) => ({ type: "WS_DISCONNECT" });
+export const wsDisconnect = () => ({ type: "WS_DISCONNECT" });

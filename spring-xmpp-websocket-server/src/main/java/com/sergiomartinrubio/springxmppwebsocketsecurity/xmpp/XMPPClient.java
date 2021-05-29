@@ -124,6 +124,7 @@ public class XMPPClient {
         try {
             BareJid contact = JidCreate.bareFrom(to + "@" + xmppProperties.getDomain());
             roster.createItemAndRequestSubscription(contact, to, null);
+            log.info("Contact '{}' added to user '{}'.", to, connection.getUser());
         } catch (XmppStringprepException | XMPPException.XMPPErrorException
                 | SmackException.NotConnectedException | SmackException.NoResponseException
                 | SmackException.NotLoggedInException | InterruptedException e) {
