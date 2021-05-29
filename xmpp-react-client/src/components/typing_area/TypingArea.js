@@ -5,12 +5,12 @@ import { Button, FormControl } from "react-bootstrap";
 // import { messageSent } from "../store/actions/messagesListActions";
 // import storage from "../utils/storage";
 
-const AddMessage = ({ dispatch }) => {
+const TypingArea = ({ dispatch }) => {
   const [content, setContent] = useState("");
 
   const handleMessage = () => {
     const msg = {
-    //   from: storage.get("user"),
+      //   from: storage.get("user"),
       to: "user2",
       content: content,
       messageType: "NEW_MESSAGE",
@@ -54,8 +54,8 @@ const AddMessage = ({ dispatch }) => {
   );
 };
 
-AddMessage.propTypes = {
+TypingArea.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default AddMessage;
+export default TypingArea;

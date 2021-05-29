@@ -1,9 +1,10 @@
 import React from "react";
-import { Button, Image, Navbar } from "react-bootstrap";
+import { Button, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { wsDisconnect } from "../../app/websocketActions";
-import { AddMessageContainer } from "../../containers/AddMessageContainer";
-import { MessagesContainer } from "../../containers/MessagesContainer";
+import { ChatBoxContainer } from "../../containers/ChatBoxContainer";
+import { TypingAreaContainer } from "../../containers/TypingAreaContainer";
+import { UserBoxContainer } from "../../containers/UsersBoxContainer";
 import { selectUsername } from "../../features/user/userSlice";
 
 const Home = () => {
@@ -33,70 +34,10 @@ const Home = () => {
 
       <div className="messaging">
         <div className="inbox-msg">
-          <div className="inbox-people">
-            <div className="headind-srch">
-              <div className="srch-bar">
-                <div className="stylish-input-group">
-                  <input
-                    type="text"
-                    className="search-bar"
-                    placeholder="Search"
-                  />
-                  <span className="input-group-addon">
-                    <Button type="button">
-                      {" "}
-                      <i className="fa fa-search" aria-hidden="true"></i>{" "}
-                    </Button>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="inbox-chat">
-              <div className="chat-list active-chat">
-                <div className="chat-people">
-                  <div className="chat-img">
-                    {" "}
-                    <Image
-                      src="https://ptetutorials.com/images/user-profile.png"
-                      alt="sunil"
-                    />{" "}
-                  </div>
-                  <div className="chat-ib">
-                    <h5>
-                      John Smith <span className="chat-date">Dec 25</span>
-                    </h5>
-                    <p>
-                      Test, which is a new approach to have all solutions
-                      astrology under one roof.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="chat-list">
-                <div className="chat-people">
-                  <div className="chat-img">
-                    {" "}
-                    <Image
-                      src="https://ptetutorials.com/images/user-profile.png"
-                      alt="sunil"
-                    />{" "}
-                  </div>
-                  <div className="chat-ib">
-                    <h5>
-                      John Smith <span className="chat-date">Dec 25</span>
-                    </h5>
-                    <p>
-                      Test, which is a new approach to have all solutions
-                      astrology under one roof.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <UserBoxContainer />
           <div className="mesgs">
-            <MessagesContainer />
-            <AddMessageContainer dispatch={dispatch} />
+            <ChatBoxContainer />
+            <TypingAreaContainer dispatch={dispatch} />
           </div>
         </div>
       </div>
