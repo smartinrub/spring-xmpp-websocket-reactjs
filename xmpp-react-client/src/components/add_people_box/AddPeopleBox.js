@@ -12,9 +12,9 @@ const AddPeopleBox = ({ dispatch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const msg = {
-        to: contact,
-        messageType: "ADD_CONTACT",
-      };
+      to: contact,
+      messageType: "ADD_CONTACT",
+    };
     dispatch(addContact(msg));
   };
 
@@ -34,7 +34,7 @@ const AddPeopleBox = ({ dispatch }) => {
             </FormGroup>
             <span className="input-group-addon">
               <Button disabled={!validateForm()} type="submit">
-                Search
+                Add
               </Button>
             </span>
           </form>
