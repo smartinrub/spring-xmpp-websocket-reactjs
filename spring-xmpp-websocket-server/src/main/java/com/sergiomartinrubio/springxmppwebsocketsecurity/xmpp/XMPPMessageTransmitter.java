@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class XMPPMessageTransmitter {
         String content = message.getBody();
         webSocketTextMessageHelper.send(
                 session,
-                TextMessage.builder()
+                WebsocketMessage.builder()
                         .from(messageFrom)
                         .to(to)
                         .content(content)

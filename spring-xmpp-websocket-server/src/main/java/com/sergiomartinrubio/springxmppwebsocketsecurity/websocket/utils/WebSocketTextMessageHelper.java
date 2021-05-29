@@ -1,6 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils;
 
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +12,11 @@ import java.io.IOException;
 @Component
 public class WebSocketTextMessageHelper {
 
-    public void send(Session session, TextMessage textMessage) {
+    public void send(Session session, WebsocketMessage websocketMessage) {
         try {
-            session.getBasicRemote().sendObject(textMessage);
+            session.getBasicRemote().sendObject(websocketMessage);
         } catch (IOException | EncodeException e) {
-            log.error("WebSocket error, message {} was not sent.", textMessage.toString(), e);
+            log.error("WebSocket error, message {} was not sent.", websocketMessage.toString(), e);
         }
     }
 }

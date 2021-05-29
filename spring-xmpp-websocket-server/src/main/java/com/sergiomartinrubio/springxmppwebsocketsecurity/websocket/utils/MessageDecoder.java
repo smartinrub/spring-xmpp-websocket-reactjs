@@ -1,17 +1,17 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils;
 
 import com.google.gson.Gson;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-public class MessageDecoder implements Decoder.Text<TextMessage> {
+public class MessageDecoder implements Decoder.Text<WebsocketMessage> {
 
     @Override
-    public TextMessage decode(String message) {
+    public WebsocketMessage decode(String message) {
         Gson gson = new Gson();
-        return gson.fromJson(message, TextMessage.class);
+        return gson.fromJson(message, WebsocketMessage.class);
     }
 
     @Override

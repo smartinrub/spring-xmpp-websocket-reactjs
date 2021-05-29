@@ -4,7 +4,7 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericEx
 import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import org.jivesoftware.smack.packet.Presence;
@@ -69,7 +69,7 @@ class XMPPFacadeTest {
         // THEN
         then(xmppClient).should().login(connection);
         then(xmppClient).should().addIncomingMessageListener(connection, session);
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS, USERNAME));
         then(xmppClient).shouldHaveNoMoreInteractions();
     }
 
@@ -89,7 +89,7 @@ class XMPPFacadeTest {
         // THEN
         then(xmppClient).should().login(connection);
         then(xmppClient).should().addIncomingMessageListener(connection, session);
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(JOIN_SUCCESS, USERNAME));
         then(xmppClient).should().createAccount(connection, USERNAME, PASSWORD);
     }
 
@@ -104,7 +104,7 @@ class XMPPFacadeTest {
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(FORBIDDEN));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(FORBIDDEN, null));
     }
 
     @Test
@@ -119,7 +119,7 @@ class XMPPFacadeTest {
 
         // THEN
         then(xmppClient).shouldHaveNoMoreInteractions();
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR, null));
     }
 
     @Test
@@ -139,13 +139,18 @@ class XMPPFacadeTest {
 
         // THEN
         then(xmppClient).should().disconnect(connection);
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR, null));
         then(xmppClient).shouldHaveNoMoreInteractions();
     }
 
     @Test
     void sendMessageShouldSendMessage() throws XmppStringprepException {
         // GIVEN
+        WebsocketMessage message = WebsocketMessage.builder()
+                .content(MESSAGE)
+                .to(TO)
+                .messageType(MessageType.NEW_MESSAGE)
+                .build();
         XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain("domain")
                 .build();
@@ -156,7 +161,7 @@ class XMPPFacadeTest {
         xmppFacade.startSession(session, USERNAME, PASSWORD);
 
         // WHEN
-        xmppFacade.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(message, session);
 
         // THEN
         then(xmppClient).should().sendMessage(connection, MESSAGE, TO);
@@ -165,6 +170,11 @@ class XMPPFacadeTest {
     @Test
     void sendMessageShouldSendErrorMessageWhenXMPPGenericException() throws XmppStringprepException {
         // GIVEN
+        WebsocketMessage message = WebsocketMessage.builder()
+                .content(MESSAGE)
+                .to(TO)
+                .messageType(MessageType.NEW_MESSAGE)
+                .build();
         XMPPTCPConnectionConfiguration configuration = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain("domain")
                 .build();
@@ -176,16 +186,23 @@ class XMPPFacadeTest {
         willThrow(XMPPGenericException.class).given(xmppClient).sendMessage(connection, MESSAGE, TO);
 
         // WHEN
-        xmppFacade.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(message, session);
 
         // THEN
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR, null));
     }
 
     @Test
     void sendMessageShouldDoNothingWhenNotFoundConnection() {
+        // GIVEN
+        WebsocketMessage message = WebsocketMessage.builder()
+                .content(MESSAGE)
+                .to(TO)
+                .messageType(MessageType.NEW_MESSAGE)
+                .build();
+
         // WHEN
-        xmppFacade.sendMessage(MESSAGE, TO, session);
+        xmppFacade.sendMessage(message, session);
 
         // THEN
         then(xmppClient).shouldHaveNoInteractions();
@@ -229,7 +246,7 @@ class XMPPFacadeTest {
         xmppFacade.disconnect(session);
 
         // THEN
-        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR));
+        then(webSocketTextMessageHelper).should().send(session, createTextMessage(ERROR, null));
     }
 
     @Test
@@ -241,8 +258,9 @@ class XMPPFacadeTest {
         then(xmppClient).shouldHaveNoInteractions();
     }
 
-    private TextMessage createTextMessage(MessageType type) {
-        return TextMessage.builder()
+    private WebsocketMessage createTextMessage(MessageType type, String to) {
+        return WebsocketMessage.builder()
+                .to(to)
                 .messageType(type)
                 .build();
     }

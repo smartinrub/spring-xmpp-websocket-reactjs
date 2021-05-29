@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class TextMessage {
+public class WebsocketMessage {
     String from;
     String to;
     String content;

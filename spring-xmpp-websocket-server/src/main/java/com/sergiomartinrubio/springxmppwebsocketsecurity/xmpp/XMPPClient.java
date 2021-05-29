@@ -13,9 +13,12 @@ import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.PresenceBuilder;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
+import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -103,6 +107,45 @@ public class XMPPClient {
         } catch (XmppStringprepException | SmackException.NotConnectedException | InterruptedException e) {
             throw new XMPPGenericException(connection.getUser().toString(), e);
         }
+    }
+
+    public void addContact(XMPPTCPConnection connection, String to) {
+        Roster roster = Roster.getInstanceFor(connection);
+
+        if (!roster.isLoaded()) {
+            try {
+                roster.reloadAndWait();
+            } catch (SmackException.NotLoggedInException | SmackException.NotConnectedException | InterruptedException e) {
+                log.error("XMPP error. Disconnecting and removing session...", e);
+                throw new XMPPGenericException(connection.getUser().toString(), e);
+            }
+        }
+
+        try {
+            BareJid contact = JidCreate.bareFrom(to + "@" + xmppProperties.getDomain());
+            roster.createItemAndRequestSubscription(contact, to, null);
+        } catch (XmppStringprepException | XMPPException.XMPPErrorException
+                | SmackException.NotConnectedException | SmackException.NoResponseException
+                | SmackException.NotLoggedInException | InterruptedException e) {
+            log.error("XMPP error. Disconnecting and removing session...", e);
+            throw new XMPPGenericException(connection.getUser().toString(), e);
+        }
+    }
+
+    public Set<RosterEntry> getContacts(XMPPTCPConnection connection) {
+        Roster roster = Roster.getInstanceFor(connection);
+
+        if (!roster.isLoaded()) {
+            try {
+                roster.reloadAndWait();
+            } catch (SmackException.NotLoggedInException | SmackException.NotConnectedException
+                    | InterruptedException e) {
+                log.error("XMPP error. Disconnecting and removing session...", e);
+                throw new XMPPGenericException(connection.getUser().toString(), e);
+            }
+        }
+
+        return roster.getEntries();
     }
 
     public void disconnect(XMPPTCPConnection connection) {

@@ -2,7 +2,7 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.config.SpringContext;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.WebSocketException;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.TextMessage;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
@@ -30,8 +30,8 @@ public class ChatWebSocket {
     }
 
     @OnMessage
-    public void handleMessage(TextMessage message, Session session) {
-        xmppFacade.sendMessage(message.getContent(), message.getTo(), session);
+    public void handleMessage(WebsocketMessage message, Session session) {
+        xmppFacade.sendMessage(message, session);
     }
 
     @OnClose
