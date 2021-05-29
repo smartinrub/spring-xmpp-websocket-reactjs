@@ -1,7 +1,7 @@
 import { history } from "../browserhistory";
 import {
   disableAlertUser,
-  enableAlertUser,
+  enableAlertUser
 } from "../features/user/alertUserSlice";
 import { login, logout } from "../features/user/userSlice";
 
@@ -9,10 +9,12 @@ const websocketMiddleware = () => {
   let socket = null;
 
   const onOpen = (store) => (event) => {
-    console.log("hello");
+    // store.dispatch(actions.wsConnected(event.target.url));
   };
 
-  const onClose = (store) => () => {};
+  const onClose = (store) => () => {
+    // store.dispatch(actions.wsDisconnected());
+  };
 
   const onMessage = (store) => (event) => {
     const payload = JSON.parse(event.data);
