@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { wsDisconnect } from "../../app/websocketActions";
 import { ChatBoxContainer } from "../../containers/ChatBoxContainer";
 import { TypingAreaContainer } from "../../containers/TypingAreaContainer";
-import { UserBoxContainer } from "../../containers/UsersBoxContainer";
+import { ContactsBoxContainer } from "../../containers/ContactsBoxContainer";
 import { selectUsername } from "../../features/user/userSlice";
 
 const Home = () => {
@@ -34,7 +34,7 @@ const Home = () => {
 
       <div className="messaging">
         <div className="inbox-msg">
-          <UserBoxContainer />
+          <ContactsBoxContainer />
           <div className="mesgs">
             <ChatBoxContainer />
             <TypingAreaContainer dispatch={dispatch} />

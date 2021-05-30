@@ -9,13 +9,10 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSock
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.Session;
@@ -105,18 +102,15 @@ public class XMPPFacade {
                     handleXMPPGenericException(session, connection, e);
                 }
 
-                JSONObject json = new JSONObject();
+                JSONArray jsonArray = new JSONArray();
                 for (RosterEntry entry : contacts) {
-                    try {
-                        json.put("name", entry.getName());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    jsonArray.put(entry.getName());
                 }
                 WebsocketMessage responseMessage = WebsocketMessage.builder()
-                        .content(json.toString())
+                        .content(jsonArray.toString())
                         .messageType(GET_CONTACTS)
                         .build();
+                log.info("Returning list of contacts {} for user {}.", jsonArray, connection.getUser());
                 webSocketTextMessageHelper.send(session, responseMessage);
             }
             default -> log.warn("Message type not implemented.");

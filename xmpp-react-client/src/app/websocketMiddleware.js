@@ -1,4 +1,5 @@
 import { history } from "../browserhistory";
+import { add } from "../features/contacts/contactsSlice";
 import {
   disableAlertUser,
   enableAlertUser
@@ -31,6 +32,12 @@ const websocketMiddleware = () => {
 
         history.push("/home");
 
+        const msg = {
+          messageType: "GET_CONTACTS",
+        };
+
+        socket.send(JSON.stringify(msg));
+
         console.log("Connected to XMPP server!");
         break;
       case "NEW_MESSAGE":
@@ -47,6 +54,9 @@ const websocketMiddleware = () => {
           enableAlertUser({ message: "Invalid password", enabled: true })
         );
         console.log("Invalid password");
+        break;
+      case "GET_CONTACTS":
+        store.dispatch(add(JSON.parse(payload.content)));
         break;
       default:
         console.log(payload);
@@ -84,6 +94,12 @@ const websocketMiddleware = () => {
         break;
       case "ADD_CONTACT":
         socket.send(JSON.stringify(action.msg));
+        
+        const msg = {
+          messageType: "GET_CONTACTS",
+        };
+
+        socket.send(JSON.stringify(msg));
         break;
       default:
         return next(action);

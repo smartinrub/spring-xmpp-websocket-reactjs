@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, FormControl, FormGroup } from "react-bootstrap";
 import { addContact } from "../../app/contactActions";
 
-const AddPeopleBox = ({ dispatch }) => {
+const AddContactBox = ({ dispatch }) => {
   const [contact, setContact] = useState("");
 
   const validateForm = () => {
@@ -15,6 +15,7 @@ const AddPeopleBox = ({ dispatch }) => {
       to: contact,
       messageType: "ADD_CONTACT",
     };
+    setContact("");
     dispatch(addContact(msg));
   };
 
@@ -44,4 +45,4 @@ const AddPeopleBox = ({ dispatch }) => {
   );
 };
 
-export default AddPeopleBox;
+export default AddContactBox;

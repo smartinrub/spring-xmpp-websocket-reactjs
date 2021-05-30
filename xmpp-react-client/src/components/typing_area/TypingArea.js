@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { newMessage } from "../../app/typingAreaActions";
 import { selectUsername } from "../../features/user/userSlice";
