@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrent } from "../../features/current/currentSlice";
 // import Message from './Message';
 
 const Messages = ({ messages }) => {
@@ -9,8 +11,12 @@ const Messages = ({ messages }) => {
     }
   }, [messages]);
 
+  const currentContact = useSelector(selectCurrent)
+
   return (
     <div className="msg-history">
+      {currentContact != null ? currentContact : ""}
+      <div className="type-msg"/>
       <ul>
         {/* {messages.map((message) => (
           <div ref={ref} key={message.id}>

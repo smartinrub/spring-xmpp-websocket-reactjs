@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import AddPeopleBoxContainer from "../../containers/AddContactBoxContainer";
+import { ContactContainer } from "../../containers/ContactContainer";
 import { selectContacts } from "../../features/contacts/contactsSlice";
-import Contact from "../contact/Contact";
 
 const ContactsBox = () => {
   const contacts = useSelector(selectContacts);
@@ -12,7 +12,7 @@ const ContactsBox = () => {
       <AddPeopleBoxContainer />
       <div className="inbox-chat">
         {contacts.map((name, index) => (
-          <Contact eventKey={index} name={name} />
+          <ContactContainer eventKey={index} name={name} />
         ))}
       </div>
     </div>

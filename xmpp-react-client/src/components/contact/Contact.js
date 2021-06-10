@@ -1,10 +1,14 @@
 import React from "react";
 import { Image } from "react-bootstrap";
 
-const Contact = ({ name }) => {
+const Contact = ({ selectCurrent, name }) => {
+  const setCurrent = () => {
+    selectCurrent(name);
+  };
+
   return (
-    <div className="chat-list active-chat">
-      <div className="chat-people">
+    <div className={"chat-list active-chat"}>
+      <div className="chat-people" onClick={setCurrent}>
         <div className="chat-img">
           {" "}
           <Image
