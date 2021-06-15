@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrent } from "../../features/current/currentSlice";
-// import Message from './Message';
+import { selectMessages } from "../../features/messages/messagesSlice";
+import Message from "../message/Message";
 
-const Messages = ({ messages }) => {
+const ChatBox = () => {
+  const currentContact = useSelector(selectCurrent);
+  const messages = useSelector(selectMessages);
+
   const ref = React.useRef();
   useEffect(() => {
     if (ref.current) {
@@ -11,21 +15,19 @@ const Messages = ({ messages }) => {
     }
   }, [messages]);
 
-  const currentContact = useSelector(selectCurrent)
-
   return (
     <div className="msg-history">
       {currentContact != null ? currentContact : ""}
-      <div className="type-msg"/>
+      <div className="type-msg" />
       <ul>
-        {/* {messages.map((message) => (
+        {messages.map((message) => (
           <div ref={ref} key={message.id}>
             <Message {...message} />
           </div>
-        ))} */}
+        ))}
       </ul>
     </div>
   );
 };
 
-export default Messages;
+export default ChatBox;

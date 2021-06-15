@@ -1,5 +1,6 @@
 import { history } from "../browserhistory";
 import { add } from "../features/contacts/contactsSlice";
+import { addMessage } from "../features/messages/messagesSlice";
 import {
   disableAlertUser,
   enableAlertUser
@@ -41,7 +42,11 @@ const websocketMiddleware = () => {
         console.log("Connected to XMPP server!");
         break;
       case "NEW_MESSAGE":
-        console.log(payload.content);
+        const message = {
+          content: payload.content,
+          type: payload.messageType
+        }
+        store.dispatch(addMessage(message));
         break;
       case "ERROR":
         console.log("Join failed!!!");
@@ -94,7 +99,7 @@ const websocketMiddleware = () => {
         break;
       case "ADD_CONTACT":
         socket.send(JSON.stringify(action.msg));
-        
+
         const msg = {
           messageType: "GET_CONTACTS",
         };

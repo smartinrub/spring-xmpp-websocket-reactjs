@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { newMessage } from "../../app/typingAreaActions";
+import { selectCurrent } from "../../features/current/currentSlice";
 import { selectUsername } from "../../features/user/userSlice";
 // import { messageSent } from "../store/actions/messagesListActions";
 // import storage from "../utils/storage";
@@ -11,10 +12,12 @@ const TypingArea = ({ dispatch }) => {
 
   const user = useSelector(selectUsername);
 
+  const currentContact = useSelector(selectCurrent)
+
   const handleMessage = () => {
     const msg = {
       from: user.username,
-      to: "sergio",
+      to: currentContact,
       content: content,
       messageType: "NEW_MESSAGE",
     };
