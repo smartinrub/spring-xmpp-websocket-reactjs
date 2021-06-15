@@ -3,16 +3,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { newMessage } from "../../app/typingAreaActions";
 import { selectCurrent } from "../../features/current/currentSlice";
+import { addMessage } from "../../features/messages/messagesSlice";
 import { selectUsername } from "../../features/user/userSlice";
-// import { messageSent } from "../store/actions/messagesListActions";
-// import storage from "../utils/storage";
 
 const TypingArea = ({ dispatch }) => {
   const [content, setContent] = useState("");
 
   const user = useSelector(selectUsername);
 
-  const currentContact = useSelector(selectCurrent)
+  const currentContact = useSelector(selectCurrent);
 
   const handleMessage = () => {
     const msg = {
@@ -21,8 +20,13 @@ const TypingArea = ({ dispatch }) => {
       content: content,
       messageType: "NEW_MESSAGE",
     };
+    const msgSent = {
+      from: user.username,
+      to: currentContact,
+      content: content,
+    };
     setContent("");
-    // dispatch(messageSent(content));
+    dispatch(addMessage(msgSent));
     dispatch(newMessage(msg));
   };
 

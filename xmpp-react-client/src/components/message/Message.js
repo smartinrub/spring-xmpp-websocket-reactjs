@@ -3,7 +3,7 @@ import React from 'react';
 const Message = ({ content, type }) => {
   let wrapperClassName = 'outgoing-msg';
   let className = 'sent-msg';
-  if (type === 'MESSAGE_RECEIVED') {
+  if (type === 'NEW_MESSAGE') {
     wrapperClassName = 'incoming-msg';
     className = 'received-msg received-withd-msg';
   }
