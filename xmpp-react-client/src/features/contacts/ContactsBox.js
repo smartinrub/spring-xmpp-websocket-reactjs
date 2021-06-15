@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import AddPeopleBoxContainer from "../../containers/AddContactBoxContainer";
-import { ContactContainer } from "../../containers/ContactContainer";
-import { selectContacts } from "../../features/contacts/contactsSlice";
+import AddPeopleBoxContainer from "./AddContactBoxContainer";
+import { ContactContainer } from "./ContactContainer";
+import { selectContacts } from "./contactsSlice";
 
 const ContactsBox = () => {
   const contacts = useSelector(selectContacts);

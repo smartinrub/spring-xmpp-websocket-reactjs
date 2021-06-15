@@ -9,8 +9,8 @@ import {
   Jumbotron,
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { wsConnect } from "../../app/websocketActions";
-import { selectAlertUser } from "../../features/user/alertUserSlice";
+import { wsConnect } from "../../common/middleware/websocketActions";
+import { selectAlert } from "../alert/alertSlice";
 
 // use rfce to generate component quickly
 const Login = ({ dispatch }) => {
@@ -26,7 +26,7 @@ const Login = ({ dispatch }) => {
     dispatch(wsConnect(username, password));
   };
 
-  const alertUser = useSelector(selectAlertUser);
+  const alert = useSelector(selectAlert);
 
   return (
     <div className="login">
@@ -44,7 +44,7 @@ const Login = ({ dispatch }) => {
             minHeight: "100px",
           }}
         >
-          {alertUser ? (
+          {alert ? (
             <Alert variant="danger">Invalid password!</Alert>
           ) : (
             <div></div>

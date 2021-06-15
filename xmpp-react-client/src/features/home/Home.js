@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { wsDisconnect } from "../../app/websocketActions";
-import { ChatBoxContainer } from "../../containers/ChatBoxContainer";
-import { TypingAreaContainer } from "../../containers/TypingAreaContainer";
-import { ContactsBoxContainer } from "../../containers/ContactsBoxContainer";
-import { selectUsername } from "../../features/user/userSlice";
+import { wsDisconnect } from "../../common/middleware/websocketActions";
+import { ChatBoxContainer } from "../messages/ChatBoxContainer";
+import { TypingAreaContainer } from "../messages/TypingAreaContainer";
+import { ContactsBoxContainer } from "../contacts/ContactsBoxContainer";
+import { selectUsername } from "../user/userSlice";
 
 const Home = () => {
   const user = useSelector(selectUsername);

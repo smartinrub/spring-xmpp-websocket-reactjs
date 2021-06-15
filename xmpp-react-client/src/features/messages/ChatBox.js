@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrent } from "../../features/current/currentSlice";
-import { selectMessages } from "../../features/messages/messagesSlice";
-import Message from "../message/Message";
+import { selectCurrent } from "../current/currentSlice";
+import { selectMessages } from "./messagesSlice";
+import Message from "./Message";
 
 const ChatBox = () => {
   const currentContact = useSelector(selectCurrent);

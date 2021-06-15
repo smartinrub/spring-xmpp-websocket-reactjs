@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, FormControl, FormGroup } from "react-bootstrap";
-import { addContact } from "../../app/contactActions";
+import { addContact } from "./contactActions";
 
 const AddContactBox = ({ dispatch }) => {
   const [contact, setContact] = useState("");

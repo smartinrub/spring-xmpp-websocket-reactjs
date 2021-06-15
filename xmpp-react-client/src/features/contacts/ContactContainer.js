@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
-import Contact from "../components/contact/Contact";
-import { select } from "../features/current/currentSlice";
+import Contact from "./Contact";
+import { select } from "../current/currentSlice";
 
 const mapDispatchToProps = (dispatch) => {
   return {

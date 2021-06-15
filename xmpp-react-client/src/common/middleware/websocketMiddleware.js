@@ -1,11 +1,8 @@
-import { history } from "../browserhistory";
-import { add } from "../features/contacts/contactsSlice";
-import { addMessage } from "../features/messages/messagesSlice";
-import {
-  disableAlertUser,
-  enableAlertUser
-} from "../features/user/alertUserSlice";
-import { login, logout } from "../features/user/userSlice";
+import { history } from "../../app/browserhistory";
+import { disableAlert, enableAlert } from "../../features/alert/alertSlice";
+import { add } from "../../features/contacts/contactsSlice";
+import { addMessage } from "../../features/messages/messagesSlice";
+import { login, logout } from "../../features/user/userSlice";
 
 const websocketMiddleware = () => {
   let socket = null;
@@ -29,7 +26,7 @@ const websocketMiddleware = () => {
           })
         );
 
-        store.dispatch(disableAlertUser());
+        store.dispatch(disableAlert());
 
         history.push("/home");
 
@@ -44,8 +41,8 @@ const websocketMiddleware = () => {
       case "NEW_MESSAGE":
         const message = {
           content: payload.content,
-          type: payload.messageType
-        }
+          type: payload.messageType,
+        };
         store.dispatch(addMessage(message));
         break;
       case "ERROR":
@@ -56,7 +53,7 @@ const websocketMiddleware = () => {
         break;
       case "FORBIDDEN":
         store.dispatch(
-          enableAlertUser({ message: "Invalid password", enabled: true })
+          enableAlert({ message: "Invalid password", enabled: true })
         );
         console.log("Invalid password");
         break;

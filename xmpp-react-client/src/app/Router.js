@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Router } from "react-router";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { history } from "./browserhistory";
-import HomeContainer from "./containers/HomeContainer";
-import LoginContainer from "./containers/LoginContainer";
-import { selectLoggedIn } from "./features/user/userSlice";
+import HomeContainer from "../features/home/HomeContainer";
+import LoginContainer from "../features/user/LoginContainer";
+import { selectLoggedIn } from "../features/user/userSlice";
 
 const MyRouter = () => {
   const loggedIn = useSelector(selectLoggedIn);

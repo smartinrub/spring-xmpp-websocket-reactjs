@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import Login from "../components/login/Login";
+import Login from "./Login";
 
 const LoginContainer = connect()(Login);
 

@@ -1,4 +1,4 @@
 import { connect } from 'react-redux';
-import ContactsBox from '../components/contacts_box/ContactsBox';
+import ContactsBox from './ContactsBox';
 
 export const ContactsBoxContainer = connect()(ContactsBox);

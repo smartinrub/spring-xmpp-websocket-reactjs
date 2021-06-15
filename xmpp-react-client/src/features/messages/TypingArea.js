@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { newMessage } from "../../app/typingAreaActions";
-import { selectCurrent } from "../../features/current/currentSlice";
-import { addMessage } from "../../features/messages/messagesSlice";
-import { selectUsername } from "../../features/user/userSlice";
+import { newMessage } from "./typingAreaActions";
+import { selectCurrent } from "../current/currentSlice";
+import { addMessage } from "./messagesSlice";
+import { selectUsername } from "../user/userSlice";
 
 const TypingArea = ({ dispatch }) => {
   const [content, setContent] = useState("");
