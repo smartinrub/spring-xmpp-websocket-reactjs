@@ -45,7 +45,8 @@ const websocketMiddleware = () => {
         store.dispatch(addMessage(message));
         break;
       case "ERROR":
-        console.log("Join failed!!!");
+        store.dispatch(logout());
+        history.push("/login");
         break;
       case "LEAVE":
         console.log(payload);

@@ -9,7 +9,12 @@ export const messagesSlice = createSlice({
   initialState,
   reducers: {
     addMessage: (state, action) => {
-      state.messages.push(action.payload);
+      const newMessage = {
+        id: state.messages.length,
+        content: action.payload.content,
+        type: action.payload.type
+      }
+      state.messages.push(newMessage);
     },
   },
 });

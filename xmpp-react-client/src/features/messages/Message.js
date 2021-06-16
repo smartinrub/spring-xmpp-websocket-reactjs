@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Message = ({ content, type }) => {
+const Message = ({ id, content, type }) => {
   let wrapperClassName = 'outgoing-msg';
   let className = 'sent-msg';
   if (type === 'NEW_MESSAGE') {
@@ -36,7 +36,7 @@ const Message = ({ content, type }) => {
     months[today.getMonth()];
 
   return (
-    <div className={wrapperClassName}>
+    <div className={wrapperClassName} key={id}>
       {/* <div className="incoming-msg-img">
         {' '}
         <Image

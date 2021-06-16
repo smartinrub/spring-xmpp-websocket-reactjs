@@ -12,7 +12,7 @@ const ContactsBox = () => {
       <AddPeopleBoxContainer />
       <div className="inbox-chat">
         {contacts.map((name, index) => (
-          <ContactContainer eventKey={index} name={name} />
+          <ContactContainer key={index} name={name} />
         ))}
       </div>
     </div>
