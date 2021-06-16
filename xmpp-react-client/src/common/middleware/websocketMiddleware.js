@@ -36,8 +36,6 @@ const websocketMiddleware = () => {
         };
 
         socket.send(JSON.stringify(msg));
-
-        console.log("Connected to XMPP server!");
         break;
       case "NEW_MESSAGE":
         const message = {

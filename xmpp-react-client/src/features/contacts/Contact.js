@@ -1,13 +1,13 @@
 import React from "react";
 import { Image } from "react-bootstrap";
 
-const Contact = ({ selectCurrent, name }) => {
+const Contact = ({ selectCurrent, name, eventKey }) => {
   const setCurrent = () => {
     selectCurrent(name);
   };
 
   return (
-    <div className={"chat-list active-chat"}>
+    <div className={"chat-list active-chat"} key={eventKey}>
       <div className="chat-people" onClick={setCurrent}>
         <div className="chat-img">
           {" "}
