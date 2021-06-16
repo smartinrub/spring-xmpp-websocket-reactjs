@@ -12,7 +12,8 @@ const websocketMiddleware = () => {
   };
 
   const onClose = (store) => () => {
-    // store.dispatch(actions.wsDisconnected());
+    store.dispatch(logout());
+    history.push("/login");
   };
 
   const onMessage = (store) => (event) => {
@@ -66,6 +67,15 @@ const websocketMiddleware = () => {
     }
   };
 
+  const onError = (store) => (event) => {
+    const msg = {
+      message:
+        "Something went wrong when connecting to the Chat Server. Please contact support if the error persists.",
+      enabled: true,
+    };
+    store.dispatch(enableAlert(msg));
+  };
+
   return (store) => (next) => (action) => {
     switch (action.type) {
       case "WS_CONNECT":
@@ -81,6 +91,7 @@ const websocketMiddleware = () => {
         socket.onmessage = onMessage(store);
         socket.onclose = onClose(store);
         socket.onopen = onOpen(store);
+        socket.onerror = onError(store);
 
         break;
       case "WS_DISCONNECT":

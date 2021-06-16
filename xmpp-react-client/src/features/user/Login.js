@@ -45,7 +45,7 @@ const Login = ({ dispatch }) => {
           }}
         >
           {alert ? (
-            <Alert variant="danger">Invalid password!</Alert>
+            <Alert variant="danger">{alert.message}</Alert>
           ) : (
             <div></div>
           )}
