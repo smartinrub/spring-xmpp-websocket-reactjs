@@ -1,11 +1,11 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.config.SpringContext;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.WebSocketException;
-import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
+import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -15,6 +15,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+@Slf4j
 @ServerEndpoint(value = "/chat/{username}/{password}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatWebSocket {
 
@@ -40,7 +41,8 @@ public class ChatWebSocket {
     }
 
     @OnError
-    public void onError(Throwable e) {
-        throw new WebSocketException(e);
+    public void onError(Throwable e, Session session) {
+        log.debug(e.getMessage());
+        xmppFacade.disconnect(session);
     }
 }
