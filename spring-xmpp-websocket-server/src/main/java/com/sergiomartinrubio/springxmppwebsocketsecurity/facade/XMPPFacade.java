@@ -31,7 +31,6 @@ import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageTyp
 @RequiredArgsConstructor
 public class XMPPFacade {
 
-    // TODO: save user
     private static final Map<Session, XMPPTCPConnection> CONNECTIONS = new HashMap<>();
 
     private final AccountService accountService;
@@ -39,6 +38,11 @@ public class XMPPFacade {
     private final XMPPClient xmppClient;
 
     public void startSession(Session session, String username, String password) {
+        // TODO: Save user session to avoid having to login again when the websocket connection is closed
+        //      1. Generate token
+        //      2. Save username and token in Redis
+        //      3. Return token to client and store it in a cookie or local storage
+        //      4. When starting a websocket session check if the token is still valid and bypass XMPP authentication
         Optional<Account> account = accountService.getAccount(username);
 
         if (account.isPresent() && !BCryptUtils.isMatch(password, account.get().getPassword())) {
