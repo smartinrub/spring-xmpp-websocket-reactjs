@@ -87,6 +87,7 @@ public class XMPPFacade {
             case NEW_MESSAGE -> {
                 try {
                     xmppClient.sendMessage(connection, message.getContent(), message.getTo());
+                    // TODO: save message for both users in DB
                 } catch (XMPPGenericException e) {
                     handleXMPPGenericException(session, connection, e);
                 }
