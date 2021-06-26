@@ -1,13 +1,18 @@
 import React from "react";
 import { Image } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { selectCurrent } from "../current/currentSlice";
 
-const Contact = ({ selectCurrent, name, eventKey }) => {
+
+const Contact = ({ select, name, eventKey }) => {
   const setCurrent = () => {
-    selectCurrent(name);
+    select(name);
   };
 
+  const current  = useSelector(selectCurrent)
+
   return (
-    <div className={"chat-list active-chat"} key={eventKey}>
+    <div className={`chat-list ${current === name ? "active-chat" : ""}`} key={eventKey}>
       <div className="chat-people" onClick={setCurrent}>
         <div className="chat-img">
           {" "}
@@ -15,6 +20,7 @@ const Contact = ({ selectCurrent, name, eventKey }) => {
             src="https://ptetutorials.com/images/user-profile.png"
             alt="sunil"
           />{" "}
+          
         </div>
         <div className="chat-ib">
           <h5>

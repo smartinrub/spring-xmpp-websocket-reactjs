@@ -4,7 +4,7 @@ import { select } from "../current/currentSlice";
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectCurrent: (name) => dispatch(select(name)),
+    select: (name) => dispatch(select(name)),
   };
 };
 

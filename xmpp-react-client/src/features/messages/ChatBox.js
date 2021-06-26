@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrent } from "../current/currentSlice";
-import { selectMessages } from "./messagesSlice";
 import Message from "./Message";
+import { selectMessages } from "./messagesSlice";
 
 const ChatBox = () => {
-  const currentContact = useSelector(selectCurrent);
   const messages = useSelector(selectMessages);
 
   const ref = React.useRef();
@@ -17,7 +15,6 @@ const ChatBox = () => {
 
   return (
     <div className="msg-history">
-      {currentContact != null ? currentContact : ""}
       <div className="type-msg" />
       <ul>
         {messages.map((message) => (
