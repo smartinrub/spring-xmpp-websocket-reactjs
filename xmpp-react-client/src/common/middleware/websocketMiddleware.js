@@ -47,9 +47,11 @@ const websocketMiddleware = () => {
       case "ERROR":
         store.dispatch(logout());
         history.push("/login");
+        socket = null;
         break;
       case "LEAVE":
         console.log(payload);
+        socket = null;
         break;
       case "FORBIDDEN":
         store.dispatch(
