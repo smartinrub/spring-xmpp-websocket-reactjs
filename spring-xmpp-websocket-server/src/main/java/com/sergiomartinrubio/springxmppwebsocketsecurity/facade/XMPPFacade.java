@@ -140,7 +140,7 @@ public class XMPPFacade {
         CONNECTIONS.remove(session);
     }
 
-    private void handleXMPPGenericException(Session session, XMPPTCPConnection connection, XMPPGenericException e) {
+    private void handleXMPPGenericException(Session session, XMPPTCPConnection connection, Exception e) {
         log.error("XMPP error. Disconnecting and removing session...", e);
         xmppClient.disconnect(connection);
         webSocketTextMessageHelper.send(session, WebsocketMessage.builder().messageType(ERROR).build());

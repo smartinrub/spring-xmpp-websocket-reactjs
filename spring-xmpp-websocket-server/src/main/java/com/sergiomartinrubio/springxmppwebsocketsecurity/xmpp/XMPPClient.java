@@ -20,6 +20,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -58,7 +59,6 @@ public class XMPPClient {
 
             connection = new XMPPTCPConnection(config);
             connection.connect();
-            log.info("User '{}' connected.", username);
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
             return Optional.empty();
         }
@@ -86,7 +86,10 @@ public class XMPPClient {
         try {
             connection.login();
         } catch (XMPPException | SmackException | IOException | InterruptedException e) {
-            throw new XMPPGenericException(connection.getUser().toString(), e);
+            log.error("Login to XMPP server with user {} failed.", connection.getUser(), e);
+
+            EntityFullJid user = connection.getUser();
+            throw new XMPPGenericException(user == null ? "unknown" : user.toString(), e);
         }
         log.info("User '{}' logged in.", connection.getUser());
     }
