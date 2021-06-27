@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button, FormControl, FormGroup } from "react-bootstrap";
 import { addContact } from "./contactActions";
 
 const AddContactBox = ({ dispatch }) => {
@@ -20,28 +19,26 @@ const AddContactBox = ({ dispatch }) => {
   };
 
   return (
-    <div className="headind-srch">
-      <div className="srch-bar">
-        <div className="stylish-input-group">
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <FormGroup controlId="contact">
-              <FormControl
-                type="text"
-                className="search-bar"
-                value={contact}
-                placeholder="Type contact name"
-                onChange={(e) => setContact(e.target.value)}
-              />
-            </FormGroup>
-            <span className="input-group-addon">
-              <Button disabled={!validateForm()} type="submit">
-                Add
-              </Button>
-            </span>
-          </form>
+    <form onSubmit={(e) => handleSubmit(e)}>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button
+            disabled={!validateForm()}
+            className="input-group-text btn btn-outline-info"
+            type="submit"
+          >
+            <i className="fa fa-search"></i>
+          </button>
         </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search..."
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+        />
       </div>
-    </div>
+    </form>
   );
 };
 

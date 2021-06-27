@@ -2,9 +2,8 @@ import React from "react";
 import { Button, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { wsDisconnect } from "../../common/middleware/websocketActions";
-import { ChatBoxContainer } from "../messages/ChatBoxContainer";
-import { TypingAreaContainer } from "../messages/TypingAreaContainer";
 import { ContactsBoxContainer } from "../contacts/ContactsBoxContainer";
+import { ChatBoxContainer } from "../messages/ChatBoxContainer";
 import { selectUsername } from "../user/userSlice";
 
 const Home = () => {
@@ -32,12 +31,13 @@ const Home = () => {
         </Navbar.Collapse>
       </Navbar>
 
-      <div className="messaging">
-        <div className="inbox-msg">
-          <ContactsBoxContainer />
-          <div className="mesgs">
-            <ChatBoxContainer />
-            <TypingAreaContainer dispatch={dispatch} />
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card chat-app">
+              <ContactsBoxContainer />
+              <ChatBoxContainer />
+            </div>
           </div>
         </div>
       </div>

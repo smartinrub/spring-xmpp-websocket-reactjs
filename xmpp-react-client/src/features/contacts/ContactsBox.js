@@ -8,13 +8,13 @@ const ContactsBox = () => {
   const contacts = useSelector(selectContacts);
 
   return (
-    <div className="inbox-people">
+    <div id="plist" class="people-list">
       <AddPeopleBoxContainer />
-      <div className="inbox-chat">
+      <ul class="list-unstyled chat-list mt-2 mb-0">
         {contacts.map((name, index) => (
           <ContactContainer key={index} name={name} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { newMessage } from "./typingAreaActions";
 import { selectCurrent } from "../current/currentSlice";
-import { addMessage } from "./messagesSlice";
 import { selectUsername } from "../user/userSlice";
+import { addMessage } from "./messagesSlice";
+import { newMessage } from "./typingAreaActions";
 
 const TypingArea = ({ dispatch }) => {
   const [content, setContent] = useState("");
@@ -41,24 +41,26 @@ const TypingArea = ({ dispatch }) => {
   };
 
   return (
-    <div className="type-msg">
-      <div className="input-msg-write">
+    <div className="chat-message clearfix">
+      <div className="input-group mb-0">
+        <div className="input-group-prepend">
+          <button
+            className="input-group-text btn btn-outline-primary"
+            type="button"
+            onClick={handleMessage}
+            disabled={!validateForm()}
+          >
+            <i className="fa fa-send"></i>
+          </button>
+        </div>
         <input
           type="text"
-          className="write-msg"
+          className="form-control"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Type a message"
           onKeyDown={onKeyDown}
+          placeholder="Enter text here..."
         />
-        <button
-          className="msg-send-btn"
-          type="button"
-          onClick={handleMessage}
-          disabled={!validateForm()}
-        >
-          Send
-        </button>
       </div>
     </div>
   );
