@@ -1,5 +1,7 @@
 # spring-xmpp-websocket-reactjs
 
+![IM System Diagram](im-system-diagram.jpg)
+
 ## Tech Stack
 
 - **Spring Boot**
