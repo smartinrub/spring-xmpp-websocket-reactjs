@@ -15,6 +15,8 @@
 
 1. Run backend services:
     ```shell
+    mvn clean install
+    docker build -t smartinrub/spring-xmpp-websocket-server . 
     docker-compose up
     ```
 2. Go to `http://localhost:9090` and setup openfire XMPP server:
