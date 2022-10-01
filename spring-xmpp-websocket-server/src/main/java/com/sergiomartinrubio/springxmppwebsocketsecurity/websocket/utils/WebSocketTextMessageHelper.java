@@ -14,9 +14,10 @@ public class WebSocketTextMessageHelper {
 
     public void send(Session session, WebsocketMessage websocketMessage) {
         try {
+            log.info("Sending message of type '{}'.", websocketMessage.getMessageType());
             session.getBasicRemote().sendObject(websocketMessage);
         } catch (IOException | EncodeException e) {
-            log.error("WebSocket error, message {} was not sent.", websocketMessage.toString(), e);
+            log.error("WebSocket error, message {} was not sent.", websocketMessage, e);
         }
     }
 }
