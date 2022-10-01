@@ -27,12 +27,15 @@ public class ChatWebSocket {
 
     @OnOpen
     public void open(Session session, @PathParam("username") String username, @PathParam("password") String password) {
+        log.info("Starting XMPP session '{}'.", session.getId());
         xmppFacade.startSession(session, username, password);
     }
 
     @OnMessage
     public void handleMessage(WebsocketMessage message, Session session) {
+        log.info("Sending message for session '{}'.", session.getId());
         xmppFacade.sendMessage(message, session);
+        log.info("Message sent for session '{}'.", session.getId());
     }
 
     @OnClose
@@ -42,7 +45,7 @@ public class ChatWebSocket {
 
     @OnError
     public void onError(Throwable e, Session session) {
-        log.debug(e.getMessage());
+        log.warn("Something went wrong.", e);
         xmppFacade.disconnect(session);
     }
 }
