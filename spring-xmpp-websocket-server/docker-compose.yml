@@ -28,7 +28,7 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
   openfire:
     container_name: openfire
-    image: quantumobject/docker-openfire
+    image: luzifer/openfire
     ports:
       - "9090:9090"
       - "5222:5222"
