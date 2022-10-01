@@ -1,5 +1,6 @@
 package com.sergiomartinrubio.springxmppwebsocketsecurity.facade;
 
+import com.google.gson.JsonArray;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericException;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
@@ -12,10 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.Session;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -54,14 +55,23 @@ public class XMPPFacade {
         Optional<XMPPTCPConnection> connection = xmppClient.connect(username, password);
 
         if (connection.isEmpty()) {
+            log.info("XMPP connection was not established. Closing websocket session...");
             webSocketTextMessageHelper.send(session, WebsocketMessage.builder().messageType(ERROR).build());
-            return;
+            try {
+                session.close();
+                return;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         try {
             if (account.isEmpty()) {
+                log.info("Creating new account.");
                 xmppClient.createAccount(connection.get(), username, password);
+                log.info("Account created.");
             }
+            log.info("Login into account.");
             xmppClient.login(connection.get());
         } catch (XMPPGenericException e) {
             handleXMPPGenericException(session, connection.get(), e);
@@ -107,9 +117,9 @@ public class XMPPFacade {
                     handleXMPPGenericException(session, connection, e);
                 }
 
-                JSONArray jsonArray = new JSONArray();
+                JsonArray jsonArray = new JsonArray();
                 for (RosterEntry entry : contacts) {
-                    jsonArray.put(entry.getName());
+                    jsonArray.add(entry.getName());
                 }
                 WebsocketMessage responseMessage = WebsocketMessage.builder()
                         .content(jsonArray.toString())
