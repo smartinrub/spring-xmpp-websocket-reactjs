@@ -48,7 +48,7 @@ public class XMPPClient {
             EntityBareJid entityBareJid;
             entityBareJid = JidCreate.entityBareFrom(username + "@" + xmppProperties.getDomain());
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                    .setHost(xmppProperties.getDomain())
+                    .setHost(xmppProperties.getHost())
                     .setPort(xmppProperties.getPort())
                     .setXmppDomain(xmppProperties.getDomain())
                     .setUsernameAndPassword(entityBareJid.getLocalpart(), plainTextPassword)
@@ -60,6 +60,7 @@ public class XMPPClient {
             connection = new XMPPTCPConnection(config);
             connection.connect();
         } catch (SmackException | IOException | XMPPException | InterruptedException e) {
+            log.info("Could not connect to XMPP server.", e);
             return Optional.empty();
         }
         return Optional.of(connection);
