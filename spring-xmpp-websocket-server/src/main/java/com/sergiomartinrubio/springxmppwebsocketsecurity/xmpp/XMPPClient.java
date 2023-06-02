@@ -76,7 +76,7 @@ public class XMPPClient {
                 SmackException.NotConnectedException |
                 InterruptedException |
                 XmppStringprepException e) {
-            throw new XMPPGenericException(connection.getUser().toString(), e);
+            throw new XMPPGenericException(username, e);
         }
 
         accountService.saveAccount(new Account(username, BCryptUtils.hash(plainTextPassword)));
@@ -132,6 +132,30 @@ public class XMPPClient {
         } catch (XmppStringprepException | XMPPException.XMPPErrorException
                 | SmackException.NotConnectedException | SmackException.NoResponseException
                 | SmackException.NotLoggedInException | InterruptedException e) {
+            log.error("XMPP error. Disconnecting and removing session...", e);
+            throw new XMPPGenericException(connection.getUser().toString(), e);
+        }
+    }
+
+    public void remove(XMPPTCPConnection connection, String to) {
+        Roster roster = Roster.getInstanceFor(connection);
+
+        if (!roster.isLoaded()) {
+            try {
+                roster.reloadAndWait();
+            } catch (SmackException.NotLoggedInException | SmackException.NotConnectedException | InterruptedException e) {
+                log.error("XMPP error. Disconnecting and removing session...", e);
+                throw new XMPPGenericException(connection.getUser().toString(), e);
+            }
+        }
+
+        try {
+            BareJid contact = JidCreate.bareFrom(to + "@" + xmppProperties.getDomain());
+            roster.removeEntry(roster.getEntry(contact));
+            log.info("User '{}' removed contact '{}'.", connection.getUser(), to);
+        } catch (XmppStringprepException | XMPPException.XMPPErrorException
+                 | SmackException.NotConnectedException | SmackException.NoResponseException
+                 | SmackException.NotLoggedInException | InterruptedException e) {
             log.error("XMPP error. Disconnecting and removing session...", e);
             throw new XMPPGenericException(connection.getUser().toString(), e);
         }

@@ -8,9 +8,9 @@ const ContactsBox = () => {
   const contacts = useSelector(selectContacts);
 
   return (
-    <div id="plist" class="people-list">
+    <div id="plist" className="people-list">
       <AddPeopleBoxContainer />
-      <ul class="list-unstyled chat-list mt-2 mb-0">
+      <ul className="list-unstyled chat-list mt-2 mb-0">
         {contacts.map((name, index) => (
           <ContactContainer key={index} name={name} />
         ))}

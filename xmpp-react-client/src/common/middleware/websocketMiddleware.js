@@ -106,6 +106,9 @@ const websocketMiddleware = () => {
       case "NEW_MESSAGE":
         socket.send(JSON.stringify(action.msg));
         break;
+      case 'UNSUBSCRIBE':
+        socket.send(JSON.stringify(action.msg));
+        break;
       case "ADD_CONTACT":
         socket.send(JSON.stringify(action.msg));
 

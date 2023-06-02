@@ -31,10 +31,10 @@ const Home = () => {
         </Navbar.Collapse>
       </Navbar>
 
-      <div class="container">
-        <div class="row clearfix">
-          <div class="col-lg-12">
-            <div class="card chat-app">
+      <div className="container">
+        <div className="row clearfix">
+          <div className="col-lg-12">
+            <div className="card chat-app">
               <ContactsBoxContainer />
               <ChatBoxContainer />
             </div>

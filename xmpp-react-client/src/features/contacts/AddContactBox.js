@@ -20,8 +20,8 @@ const AddContactBox = ({ dispatch }) => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <div class="input-group">
-        <div class="input-group-prepend">
+      <div className="input-group">
+        <div className="input-group-prepend">
           <button
             disabled={!validateForm()}
             className="input-group-text btn btn-outline-info"
@@ -32,7 +32,7 @@ const AddContactBox = ({ dispatch }) => {
         </div>
         <input
           type="text"
-          class="form-control"
+          className="form-control"
           placeholder="Search..."
           value={contact}
           onChange={(e) => setContact(e.target.value)}
