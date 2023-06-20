@@ -109,6 +109,13 @@ public class XMPPFacade {
                     handleXMPPGenericException(session, connection, e);
                 }
             }
+            case UNSUBSCRIBE -> {
+                try {
+                    xmppClient.remove(connection, message.getTo());
+                } catch (XMPPGenericException e) {
+                    handleXMPPGenericException(session, connection, e);
+                }
+            }
             case GET_CONTACTS -> {
                 Set<RosterEntry> contacts = Set.of();
                 try {
