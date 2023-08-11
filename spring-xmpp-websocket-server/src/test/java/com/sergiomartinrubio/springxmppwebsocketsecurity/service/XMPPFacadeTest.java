@@ -7,6 +7,7 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
+import jakarta.websocket.Session;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
@@ -18,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import javax.websocket.Session;
 import java.util.Optional;
 
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.ERROR;

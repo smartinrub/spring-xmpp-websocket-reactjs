@@ -4,6 +4,7 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.exception.XMPPGenericEx
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.Account;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.service.AccountService;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.BCryptUtils;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -27,7 +28,6 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;

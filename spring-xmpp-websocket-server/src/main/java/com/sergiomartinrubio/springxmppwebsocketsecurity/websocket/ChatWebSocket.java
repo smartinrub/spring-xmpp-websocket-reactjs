@@ -5,15 +5,11 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.facade.XMPPFacade;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageDecoder;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.MessageEncoder;
+import jakarta.websocket.*;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
 
 @Slf4j
 @ServerEndpoint(value = "/chat/{username}/{password}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)

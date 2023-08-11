@@ -2,9 +2,8 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils;
 
 import com.google.gson.Gson;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
-
-import javax.websocket.Decoder;
-import javax.websocket.EndpointConfig;
+import jakarta.websocket.Decoder;
+import jakarta.websocket.EndpointConfig;
 
 public class MessageDecoder implements Decoder.Text<WebsocketMessage> {
 

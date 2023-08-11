@@ -28,7 +28,7 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
   openfire:
     container_name: openfire
-    image: nasqueron/openfire:4.7.1
+    image: nasqueron/openfire:4.7.5
     ports:
       - "9090:9090"
       - "5222:5222"

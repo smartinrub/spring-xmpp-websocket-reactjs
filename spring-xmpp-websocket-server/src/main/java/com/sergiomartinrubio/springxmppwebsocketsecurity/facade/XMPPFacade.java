@@ -8,6 +8,7 @@ import com.sergiomartinrubio.springxmppwebsocketsecurity.service.AccountService;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.utils.BCryptUtils;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp.XMPPClient;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Presence;
@@ -15,17 +16,13 @@ import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.ERROR;
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.FORBIDDEN;
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.GET_CONTACTS;
-import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.JOIN_SUCCESS;
+import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.*;
 
 @Slf4j
 @Component

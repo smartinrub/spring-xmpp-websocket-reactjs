@@ -2,12 +2,11 @@ package com.sergiomartinrubio.springxmppwebsocketsecurity.xmpp;
 
 import com.sergiomartinrubio.springxmppwebsocketsecurity.model.WebsocketMessage;
 import com.sergiomartinrubio.springxmppwebsocketsecurity.websocket.utils.WebSocketTextMessageHelper;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.packet.Message;
 import org.springframework.stereotype.Component;
-
-import javax.websocket.Session;
 
 import static com.sergiomartinrubio.springxmppwebsocketsecurity.model.MessageType.NEW_MESSAGE;
 
