@@ -1,7 +1,7 @@
 services:
   xmpp-server:
     container_name: spring-xmpp-websocket-server
-    image: smartinrub/spring-xmpp-websocket-server
+    image: spring-xmpp-websocket-server
     ports:
       - "8080:8080"
     depends_on:
