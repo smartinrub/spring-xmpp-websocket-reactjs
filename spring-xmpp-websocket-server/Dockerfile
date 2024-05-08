@@ -1,4 +1,4 @@
-FROM openjdk:17-slim
+FROM openjdk:21-slim
 RUN mkdir /app
 RUN groupadd -r app && useradd -r -s /bin/false -g app app
 WORKDIR /app
